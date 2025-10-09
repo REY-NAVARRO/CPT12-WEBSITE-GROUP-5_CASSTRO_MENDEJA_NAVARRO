@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const links = document.querySelectorAll("a[data-section]");
-  const header = document.querySelector("header");
 
   links.forEach(link => {
     link.addEventListener("click", event => {
@@ -50,3 +48,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
