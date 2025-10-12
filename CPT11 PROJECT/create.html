@@ -6,6 +6,7 @@
   <title>Create Attendance</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="create.css" />
+  
 </head>
 <body>
   <header>
@@ -45,26 +46,34 @@
   </footer>
 
   <script>
-    const form = document.getElementById('attendance-form');
-    const sectionGrid = document.getElementById('section-grid');
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById('attendance-form');
+      const sectionGrid = document.getElementById('section-grid');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-      const section = document.getElementById('section').value.trim();
-      const subject = document.getElementById('subject').value.trim();
+        const section = document.getElementById('section').value.trim();
+        const subject = document.getElementById('subject').value.trim();
 
-      if (section && subject) {
-        const newCard = document.createElement('div');
-        newCard.className = 'section-card';
-        newCard.innerHTML = `
-          <h3>${section}</h3>
-          <p>${subject}</p>
-          <button>Open Attendance</button>
-        `;
-        sectionGrid.appendChild(newCard);
-        form.reset();
-      }
+        if (section && subject) {
+          const newCard = document.createElement('div');
+          newCard.className = 'section-card';
+          newCard.innerHTML = `
+            <h3>${section}</h3>
+            <p>${subject}</p>
+            <button class="open-btn">Open Attendance</button>
+          `;
+
+          // for redirect
+          newCard.querySelector('.open-btn').addEventListener('click', function () {
+            window.location.href = `attendance.html?section=${encodeURIComponent(section)}&subject=${encodeURIComponent(subject)}`;
+          });
+
+          sectionGrid.appendChild(newCard);
+          form.reset();
+        }
+      });
     });
   </script>
 </body>
