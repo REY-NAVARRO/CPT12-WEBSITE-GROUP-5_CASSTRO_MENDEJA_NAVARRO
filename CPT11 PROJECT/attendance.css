@@ -1,0 +1,195 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url("1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  color: gold;
+  padding: 10px 30px;
+  border-bottom: 3px solid gold;
+  flex-shrink: 0;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid gold;
+}
+
+.header-nav a {
+  color: gold;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.header-nav a:hover {
+  color: white;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0;
+}
+
+.container {
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+  width: 700px;
+  text-align: center;
+  border: 2px solid gold;
+  margin-bottom: 40px;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+#studentName {
+  padding: 10px;
+  width: 65%;
+  border: 1px solid gold;
+  border-radius: 5px;
+  background-color: black;
+  color: gold;
+}
+
+#studentName::placeholder {
+  color: #c2a400;
+}
+
+#addBtn {
+  padding: 10px 15px;
+  background-color: gold;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#addBtn:hover {
+  background-color: #e6c200;
+  transform: scale(1.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  color: white;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid gold;
+  vertical-align: middle;
+}
+
+th {
+  background-color: gold;
+  color: black;
+}
+
+td {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.upload-btn {
+  background-color: gold;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.upload-btn:hover {
+  background-color: #e6c200;
+  transform: scale(1.05);
+}
+
+.upload-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid gold;
+  display: block;
+  margin: auto;
+  box-shadow: 0 0 10px gold;
+}
+
+.status-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 2px;
+  transition: 0.3s;
+}
+
+.present {
+  background-color: #4caf50;
+  color: white;
+}
+
+.absent {
+  background-color: #f44336;
+  color: white;
+}
+
+.present:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.absent:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ff6666;
+  transform: scale(1.2);
+}
