@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="images/school-logo.png">
+  <style>
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .section-card {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #FFD700;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section-card h3 {
+      margin-bottom: 10px;
+      color: #FFD700;
+    }
+    .section-card p {
+      color: #ddd;
+    }
+    .section-card button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #FFD700;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .section-card button:hover {
+      background: #000;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+    }
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+    }
+    .create-btn {
+      background: #FFD700;
+      color: #000;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .create-btn:hover {
+      background: #000;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+    }
+    input[type="text"] {
+      background: #000;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+      padding: 10px;
+      border-radius: 6px;
+      width: 100%;
+    }
+    #attendance-form {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="images/school-logo.png" alt="School Logo" class="profile-pic" />
+    <nav class="header-nav">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="create-attendance" class="content-container">
+    <div class="main-content" style="text-align: center;">
+      <h2 style="color: #FFD700;">Create Attendance</h2>
+      <p style="color: #ccc;">Enter a new section and subject to add it below.</p>
+      <form id="attendance-form">
+        <label for="section" style="color: #FFD700;">Section:</label>
+        <input type="text" id="section" name="section" required /><br /><br />
+        <label for="subject" style="color: #FFD700;">Subject:</label>
+        <input type="text" id="subject" name="subject" required /><br /><br />
+        <button type="submit" class="create-btn">➕ Create</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="content-container">
+    <div class="main-content">
+      <h2 style="text-align: center; color: #FFD700;">SECTIONS</h2>
+      <div class="section-grid" id="section-grid"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p style="text-align: center; color: #FFD700;">&copy; Attendance Website</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById('attendance-form');
+      const sectionGrid = document.getElementById('section-grid');
+
+      // Load existing sections from localStorage
+      let sections = JSON.parse(localStorage.getItem('sections')) || [];
+
+      // Render all saved sections
+      sections.forEach((sec) => createCard(sec.section, sec.subject));
+
+      // Form submission
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const section = document.getElementById('section').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+
+        if (!section || !subject) return;
+
+        const newSection = { section, subject };
+        sections.push(newSection);
+        localStorage.setItem('sections', JSON.stringify(sections));
+
+        createCard(section, subject);
+        form.reset();
+      });
+
+      // Function to create section card
+      function createCard(section, subject) {
+        const newCard = document.createElement('div');
+        newCard.className = 'section-card';
+        newCard.innerHTML = `
+          <h3>${section}</h3>
+          <p>${subject}</p>
+          <button class="open-btn">Open Attendance</button>
+        `;
+
+        newCard.querySelector('.open-btn').addEventListener('click', () => {
+          window.location.href = `attendance.html?section=${encodeURIComponent(section)}&subject=${encodeURIComponent(subject)}`;
+        });
+
+        sectionGrid.appendChild(newCard);
+      }
+    });
+  </script>
+</body>
+</html>

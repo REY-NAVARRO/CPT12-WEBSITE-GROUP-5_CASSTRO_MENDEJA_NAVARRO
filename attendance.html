@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Sheet</title>
+  <link rel="icon" href="images/school-logo.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url("images/attendance.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: black;
+      color: gold;
+      padding: 10px 30px;
+      border-bottom: 3px solid gold;
+    }
+    .profile-pic {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid gold;
+    }
+    .header-nav a {
+      color: gold;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    .header-nav a:hover { color: white; }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+      width: 700px;
+      text-align: center;
+      border: 2px solid gold;
+    }
+    .input-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    #studentName {
+      padding: 10px;
+      width: 65%;
+      border: 1px solid gold;
+      border-radius: 5px;
+      background-color: black;
+      color: gold;
+    }
+    #studentName::placeholder { color: #c2a400; }
+    #addBtn {
+      padding: 10px 15px;
+      background-color: gold;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    #addBtn:hover { background-color: #e6c200; transform: scale(1.05); }
+    table { width: 100%; border-collapse: collapse; text-align: center; color: white; }
+    th, td { padding: 12px; border-bottom: 1px solid gold; }
+    th { background-color: gold; color: black; }
+    td { background-color: rgba(0, 0, 0, 0.6); }
+    .upload-btn, .status-btn {
+      border: none; border-radius: 5px; padding: 6px 10px; cursor: pointer; font-weight: bold; transition: 0.3s;
+    }
+    .upload-btn { background-color: gold; color: black; }
+    .upload-btn:hover { background-color: #e6c200; transform: scale(1.05); }
+    .upload-img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid gold; margin: auto; display: block; }
+    .present { background-color: #4caf50; color: white; }
+    .absent { background-color: #f44336; color: white; }
+    .delete-btn { background: none; border: none; color: red; font-size: 18px; cursor: pointer; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="images/school-logo.png" alt="School Logo" class="profile-pic" />
+    <nav class="header-nav">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Attendance Sheet</h1>
+      <div class="input-container">
+        <input type="text" id="studentName" placeholder="Enter student name" />
+        <button id="addBtn">Add Student</button>
+      </div>
+
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Picture</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const addBtn = document.getElementById("addBtn");
+      const studentNameInput = document.getElementById("studentName");
+      const attendanceTable = document.querySelector("#attendanceTable tbody");
+
+      // Identify section from URL
+      const params = new URLSearchParams(window.location.search);
+      const section = params.get("section") || "default_section";
+
+      // Load existing students
+      let students = JSON.parse(localStorage.getItem(`students_${section}`)) || [];
+
+      students.forEach((s) => addStudentRow(s.name, s.image));
+
+      addBtn.addEventListener("click", () => {
+        const name = studentNameInput.value.trim();
+        if (!name) return alert("Please enter a student name.");
+
+        const newStudent = { name, image: null };
+        students.push(newStudent);
+        saveStudents();
+
+        addStudentRow(name, null);
+        studentNameInput.value = "";
+      });
+
+      function addStudentRow(name, imageData) {
+        const row = document.createElement("tr");
+        const nameCell = document.createElement("td");
+        nameCell.textContent = name;
+
+        // Picture upload logic
+        const pictureCell = document.createElement("td");
+        const uploadBtn = document.createElement("button");
+        uploadBtn.textContent = "Upload";
+        uploadBtn.classList.add("upload-btn");
+        const imagePreview = document.createElement("img");
+        imagePreview.classList.add("upload-img");
+        imagePreview.style.display = imageData ? "block" : "none";
+        if (imageData) imagePreview.src = imageData;
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.style.display = "none";
+
+        uploadBtn.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+            uploadBtn.style.display = "none";
+
+            const index = students.findIndex((s) => s.name === name);
+            if (index !== -1) {
+              students[index].image = e.target.result;
+              saveStudents();
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+
+        pictureCell.append(uploadBtn, fileInput, imagePreview);
+
+        // Status + delete buttons
+        const statusCell = document.createElement("td");
+        const presentBtn = document.createElement("button");
+        presentBtn.textContent = "Present";
+        presentBtn.classList.add("status-btn", "present");
+        const absentBtn = document.createElement("button");
+        absentBtn.textContent = "Absent";
+        absentBtn.classList.add("status-btn", "absent");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "✖";
+        deleteBtn.classList.add("delete-btn");
+
+        presentBtn.addEventListener("click", () => (nameCell.style.color = "green"));
+        absentBtn.addEventListener("click", () => (nameCell.style.color = "red"));
+        deleteBtn.addEventListener("click", () => {
+          row.remove();
+          students = students.filter((s) => s.name !== name);
+          saveStudents();
+        });
+
+        statusCell.append(presentBtn, absentBtn, deleteBtn);
+
+        row.append(nameCell, pictureCell, statusCell);
+        attendanceTable.appendChild(row);
+      }
+
+      function saveStudents() {
+        localStorage.setItem(`students_${section}`, JSON.stringify(students));
+      }
+    });
+  </script>
+</body>
+</html>

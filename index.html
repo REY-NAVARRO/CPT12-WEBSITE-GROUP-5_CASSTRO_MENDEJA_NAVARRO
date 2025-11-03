@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professor Dashboard - Attendance System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="images/school-logo.png">
+</head>
+<body>
+  <header>
+    <img src="images/school-logo.png" alt="School Logo" class="profile-pic">
+    <nav class="header-nav">
+      <a href="#home">Home</a>
+      <a href="#create-attendance">Create Attendance</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="home" class="title-container">
+    <h1 style="text-align: center;">Attendance Monitoring</h1>
+    <p style="text-align: center;">Welcome to the Attendance Monitoring System.</p>
+  </section>
+
+  <section id="create-attendance" class="content-container">
+    <div class="main-content">
+      <div class="create-container">
+        <a href="create.html" class="create-link" style="align-items: center;">➕ Create Attendance</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="about" class="content-container">
+    <div class="main-content">
+      <h2 style="text-align: center;">About Us</h2>
+      <p>The Student Attendance System makes tracking class attendance easy, fast, and efficient. It allows teachers to monitor student participation in real-time, reducing the need for manual roll calls. With just a few clicks, educators can mark attendance, view reports, and manage records accurately. The system ensures that no student is overlooked, helping to identify patterns of absenteeism early. It also promotes accountability among students by keeping them aware of their attendance status. Parents can receive automatic notifications, keeping them informed about their child’s presence in class. The system is user-friendly and designed to save time for teachers while improving record accuracy. Overall, it enhances transparency, communication, and organization in the classroom environment.</p>
+    </div>
+  </section>
+
+  <section id="services" class="content-container">
+    <div class="main-content">
+      <h2 style="text-align: center;">Our Services</h2>
+      <p>We offer an easy-to-use attendance monitoring system for teachers. The system tracks student attendance in real time, helping educators save time and effort. Students can upload proof of attendance, such as photos, for verification. Parents receive instant updates about their child’s attendance status. Our goal is to make attendance tracking fast, accurate, and reliable for everyone.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="content-container">
+    <div class="main-content">
+      <h2 style="text-align: center">Contact Us</h2>
+      <p>Email: AttendanceSystem@Gmail.com</p>
+      <p>Location: SLSU LUCENA IBABANG DUPAY</p>
+      <p>No. 09123456789</p>
+    </div>
+  </section>
+
+  <footer id="footerPopup">
+    <p>&copy; Attendance Website</p>
+    <a href="feedback.html">
+      <button id="feedbackBtn">💬 Feedback</button>
+    </a>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll("a[data-section]");
+    const header = document.querySelector("header");
+
+    links.forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        const sectionId = link.getAttribute("data-section");
+        const section = document.getElementById(sectionId);
+
+        const headerHeight = header.offsetHeight;
+        const sectionHeight = section.offsetHeight;
+        const viewportHeight = window.innerHeight;
+
+        const offset = (viewportHeight - sectionHeight) / 3;
+        const topPosition = section.getBoundingClientRect().top + window.scrollY - headerHeight - offset;
+
+        window.scrollTo({
+          top: topPosition,
+          behavior: "smooth"
+        });
+      });
+    });
+
+    const footer = document.getElementById("footerPopup");
+    window.addEventListener("scroll", () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+        footer.style.bottom = "0";
+      } else {
+        footer.style.bottom = "-100px";
+      }
+    });
+
+    //header
+    let lastScrollY = window.scrollY;
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > lastScrollY) {
+        header.style.transform = "translateY(-100%)";
+      } else {
+        header.style.transform = "translateY(0)";
+      }
+      lastScrollY = window.scrollY;
+    });
+
+
+    //header
+    document.addEventListener("mousemove", (e) => {
+      if (e.clientY <= 50) { 
+        header.style.transform = "translateY(0)";
+      }
+    });
+  });
+
+
+  </script>
+</body>
+</html>
