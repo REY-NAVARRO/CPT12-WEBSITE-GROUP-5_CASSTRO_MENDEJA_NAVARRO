@@ -1,0 +1,164 @@
+
+body{
+  margin:0;
+  background:linear-gradient(#000, #a5a1a1);
+  font-family:Arial;
+  color:white;
+}
+
+.wrap{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.card{
+  width:100%;
+  max-width:900px;
+  background:#0b1220;
+  padding:25px;
+  border-radius:14px;
+  display:grid;
+  gap:20px;
+  grid-template-columns:1fr 350px;
+}
+
+.hero .brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+.logo img {
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+}
+
+
+.lead{
+  color:var(--muted);
+}
+
+.form-col{
+  background:#101827;
+  padding:20px;
+  border-radius:12px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+}
+
+.tab{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  background:#111827;
+  cursor:pointer;
+  border-radius:8px;
+}
+
+.tab.active{
+  background:#192235;
+}
+
+label{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+input{
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #334155;
+  background:#0f172a;
+  color:white;
+}
+
+.password-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.show-toggle{
+  padding:5px 10px;
+  background:#1e293b;
+  border:0;
+  color:white;
+  cursor:pointer;
+}
+
+.btn{
+  padding:10px 12px;
+  border-radius:8px;
+  border:0;
+  cursor:pointer;
+}
+
+.btn.primary{
+  background:var(--accent);
+  color:black;
+  font-weight:bold;
+}
+
+.btn.ghost{
+  background:#1e293b;
+  color:white;
+}
+
+.link{
+  background:none;
+  border:none;
+  color:var(--accent);
+  cursor:pointer;
+  text-decoration:underline;
+}
+
+.row-space{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.meter{
+  height:6px;
+  background:#1e293b;
+  border-radius:6px;
+}
+.meter i{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,red,orange,green);
+}
+
+.btn.primary{
+    color: white;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal{
+  background:#0f1724;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:400px;
+}

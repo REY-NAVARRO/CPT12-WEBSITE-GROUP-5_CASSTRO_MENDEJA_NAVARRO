@@ -43,6 +43,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s, color 0.3s;
+      margin-right: 5px;
     }
     .section-card button:hover {
       background: #000;
@@ -125,41 +126,47 @@
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById('attendance-form');
       const sectionGrid = document.getElementById('section-grid');
-
-      // Load existing sections from localStorage
+      const currentUser = localStorage.getItem('currentUser') || 'guest';
       let sections = JSON.parse(localStorage.getItem('sections')) || [];
 
-      // Render all saved sections
-      sections.forEach((sec) => createCard(sec.section, sec.subject));
+      sections.filter(sec => sec.owner === currentUser)
+              .forEach(sec => createCard(sec.section, sec.subject, sec.owner));
 
-      // Form submission
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const section = document.getElementById('section').value.trim();
         const subject = document.getElementById('subject').value.trim();
-
         if (!section || !subject) return;
 
-        const newSection = { section, subject };
+        const newSection = { section, subject, owner: currentUser };
         sections.push(newSection);
         localStorage.setItem('sections', JSON.stringify(sections));
-
-        createCard(section, subject);
+        createCard(section, subject, currentUser);
         form.reset();
       });
 
-      // Function to create section card
-      function createCard(section, subject) {
+      function createCard(section, subject, owner) {
         const newCard = document.createElement('div');
         newCard.className = 'section-card';
         newCard.innerHTML = `
           <h3>${section}</h3>
           <p>${subject}</p>
           <button class="open-btn">Open Attendance</button>
+          <button class="delete-btn">❌ Delete</button>
         `;
 
         newCard.querySelector('.open-btn').addEventListener('click', () => {
           window.location.href = `attendance.html?section=${encodeURIComponent(section)}&subject=${encodeURIComponent(subject)}`;
+        });
+
+        newCard.querySelector('.delete-btn').addEventListener('click', () => {
+          if (owner === currentUser && confirm(`Delete section "${section}"?`)) {
+            newCard.remove();
+            sections = sections.filter(s => !(s.section === section && s.subject === subject && s.owner === currentUser));
+            localStorage.setItem('sections', JSON.stringify(sections));
+          } else {
+            alert("You can only delete your own sections!");
+          }
         });
 
         sectionGrid.appendChild(newCard);
