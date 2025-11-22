@@ -4,8 +4,6 @@ body {
   background-image: url("images/e.jpg");
   background-size: 100% 100%;
   background-position: center;
-  
-
 }
 
 .wrap {
@@ -44,7 +42,6 @@ body {
   object-fit: cover;
 }
 
-
 .lead {
   color: var(--muted);
 }
@@ -80,25 +77,40 @@ label {
 }
 
 input {
+  width: 100%;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ffffffef;
   background: #e5e6e8;
   color: rgb(0, 0, 0);
+  box-sizing: border-box;
 }
 
 .password-row {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+}
+
+.password-row input {
+  width: 100%;
+  padding-right: 70px;
+  margin: 0;
 }
 
 .show-toggle {
-  padding: 5px 10px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
   background: #1e293b;
-  border: 0;
   color: white;
+  border: 0;
   cursor: pointer;
+  border-radius: 6px;
+  font-size: 12px;
 }
 
 .btn {
@@ -110,7 +122,7 @@ input {
 
 .btn.primary {
   background: var(--accent);
-  color: black;
+  color: white;
   font-weight: bold;
 }
 
@@ -134,26 +146,25 @@ input {
 }
 
 .meter {
+  margin-top: 5px;
   height: 6px;
+  width: 100%;
   background: #1e293b;
   border-radius: 6px;
+  overflow: hidden;
 }
-
 .meter i {
   display: block;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, red, orange, green);
+  transition: width .3s ease, background .3s ease;
 }
 
-.btn.primary {
-  color: white;
-}
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, .6);
+  background: rgba(0, 0, 0, 0.6);
   display: none;
   justify-content: center;
   align-items: center;

@@ -1,17 +1,17 @@
 const $ = id => document.getElementById(id);
 
-const tabLogin = $('tab-login');
-const tabRegister = $('tab-register');
-const loginForm = $('login-form');
-const registerForm = $('register-form');
-const toLoginBtn = $('to-login');
+// Tabs
+$('tab-login').onclick = () => showForm('login');
+$('tab-register').onclick = () => showForm('register');
+$('to-login').onclick = () => showForm('login');
 
-tabLogin.onclick = () => showForm('login');
-tabRegister.onclick = () => showForm('register');
-toLoginBtn.onclick = () => showForm('login');
+function showForm(which) {
+    const loginForm = $('login-form');
+    const registerForm = $('register-form');
+    const tabLogin = $('tab-login');
+    const tabRegister = $('tab-register');
 
-function showForm(which){
-    if(which === 'login'){
+    if (which === 'login') {
         tabLogin.classList.add('active');
         tabRegister.classList.remove('active');
         loginForm.style.display = 'grid';
@@ -24,95 +24,112 @@ function showForm(which){
     }
 }
 
-$('login-toggle').onclick = () => togglePwd('login-password','login-toggle');
-$('reg-toggle').onclick = () => togglePwd('reg-password','reg-toggle');
 
-function togglePwd(id,btn){
+$('login-toggle').onclick = () => togglePwd('login-password', 'login-toggle');
+$('reg-toggle').onclick = () => togglePwd('reg-password', 'reg-toggle');
+
+function togglePwd(id, btn) {
     const input = $(id);
     const button = $(btn);
-    if(input.type === 'password'){
-        input.type = 'text';
-        button.textContent = 'Hide';
-    } else {
-        input.type = 'password';
-        button.textContent = 'Show';
-    }
+    const visible = input.type === 'password';
+    input.type = visible ? 'text' : 'password';
+    button.textContent = visible ? 'Hide' : 'Show';
 }
 
-$('reg-password').oninput = e => {
+$// PASSWORD STRENGTH METER
+$('reg-password').addEventListener('input', e => {
     const pw = e.target.value;
     const score = passwordScore(pw);
-    $('pw-meter').style.width = (score*20)+'%';
-}
+    const bar = $('pw-meter');    // Targets <i>
 
-function passwordScore(p){
-    let s=0;
-    if(p.length>=6)s++;
-    if(/[A-Z]/.test(p))s++;
-    if(/[0-9]/.test(p))s++;
-    if(/[!@#$]/.test(p))s++;
-    if(p.length>=10)s++;
+    const width = score * 20;
+    bar.style.width = width + '%';
+
+    // Color scaling based on score
+    if (score <= 1) bar.style.background = 'red';
+    else if (score <= 3) bar.style.background = 'orange';
+    else bar.style.background = 'green';
+});
+
+// Strength calculation
+function passwordScore(p) {
+    let s = 0;
+    if (p.length >= 6) s++;
+    if (/[A-Z]/.test(p)) s++;
+    if (/[0-9]/.test(p)) s++;
+    if (/[!@#$]/.test(p)) s++;
+    if (p.length >= 10) s++;
     return s;
 }
 
-function readUsers(){
-    return JSON.parse(localStorage.getItem('users')||'{}');
+
+function readUsers() {
+    return JSON.parse(localStorage.getItem('users') || '{}');
 }
-function writeUsers(users){
+function writeUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
 }
 
-registerForm.onsubmit = e => {
+$('register-form').onsubmit = e => {
     e.preventDefault();
     const name = $('reg-name').value;
     const email = $('reg-email').value.toLowerCase();
     const pw = $('reg-password').value;
     const pwc = $('reg-password-confirm').value;
-    if(pw !== pwc){ alert('Passwords do not match'); return; }
+
+    if (pw !== pwc) { alert('Passwords do not match'); return; }
     const users = readUsers();
-    if(users[email]){ alert('Email already exists'); return; }
-    users[email] = { name,email,password:pw };
+    if (users[email]) { alert('Email already exists'); return; }
+
+    users[email] = { name, email, password: pw };
     writeUsers(users);
+
     alert('Account created successfully!');
     showForm('login');
 }
 
-loginForm.onsubmit = e => {
+$('login-form').onsubmit = e => {
     e.preventDefault();
     const email = $('login-email').value.toLowerCase();
     const pw = $('login-password').value;
+
     const users = readUsers();
-    if(!users[email]){ alert('Account not found'); return; }
-    if(users[email].password !== pw){ alert('Wrong password'); return; }
+    if (!users[email]) { alert('Account not found'); return; }
+    if (users[email].password !== pw) { alert('Wrong password'); return; }
 
     localStorage.setItem('loggedIn', 'true');
     localStorage.setItem('userEmail', email);
 
     alert('Login successful!');
-    window.location.href = 'index.html'; // Redirect on successful login
+    window.location.href = 'index.html';
 }
 
-const overlay = $('overlay');
-$('forgot-btn').onclick = () => overlay.style.display='flex';
-$('close-modal').onclick = () => overlay.style.display='none';
+$('forgot-btn').onclick = () => $('overlay').style.display = 'flex';
+$('close-modal').onclick = () => $('overlay').style.display = 'none';
 
 const forgotForm = $('forgot-form');
 const step2 = $('forgot-step-2');
+
 forgotForm.onsubmit = e => {
     e.preventDefault();
     const email = $('forgot-email').value.toLowerCase();
     const users = readUsers();
-    if(step2.style.display === 'none'){
-        if(!users[email]){ alert('Email not found'); return; }
-        step2.style.display='block';
+
+    if (step2.style.display === 'none') {
+        if (!users[email]) { alert('Email not found'); return; }
+        step2.style.display = 'block';
         return;
     }
+
     const npw = $('forgot-new-password').value;
     const cpw = $('forgot-new-confirm').value;
-    if(npw !== cpw){ alert('Passwords do not match'); return; }
+
+    if (npw !== cpw) { alert('Passwords do not match'); return; }
+
     users[email].password = npw;
     writeUsers(users);
+
     alert('Password reset successful!');
-    overlay.style.display='none';
-    step2.style.display='none';
+    $('overlay').style.display = 'none';
+    step2.style.display = 'none';
 }
