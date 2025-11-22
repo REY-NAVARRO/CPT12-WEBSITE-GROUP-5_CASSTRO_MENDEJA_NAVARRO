@@ -96,7 +96,7 @@
       border: 1px solid gold;
       border-radius: 5px;
       background-color: black;
-      color: gold;
+      color: white;
     }
 
     table {
@@ -179,15 +179,6 @@
       background-color: #e6c200;
       transform: scale(1.05);
     }
-
-    #studentName {
-      padding: 10px;
-      width: 65%;
-      border: 1px solid gold;
-      border-radius: 5px;
-      background-color: black;
-      color: white;
-    }
   </style>
 </head>
 
@@ -244,7 +235,6 @@
 
       const isCreator = loggedInEmail === sectionData.creator;
 
-      // Load saved students
       sectionData.students.forEach((s) => addStudentRow(s.name, s.image));
 
       addBtn.addEventListener("click", () => {
@@ -262,11 +252,9 @@
       function addStudentRow(name, imageData) {
         const row = document.createElement("tr");
 
-        // --- NAME CELL ---
         const nameCell = document.createElement("td");
         nameCell.textContent = name;
 
-        // --- PICTURE CELL ---
         const pictureCell = document.createElement("td");
         const uploadBtn = document.createElement("button");
         const imagePreview = document.createElement("img");
@@ -308,9 +296,7 @@
 
         pictureCell.append(uploadBtn, fileInput, imagePreview);
 
-        // --- STATUS CELL (PRESENT/ABSENT + TIME LOG) ---
         const statusCell = document.createElement("td");
-
         const timeLog = document.createElement("span");
 
         const presentBtn = document.createElement("button");
@@ -329,11 +315,15 @@
           presentBtn.addEventListener("click", () => {
             const time = new Date().toLocaleTimeString();
             timeLog.textContent = `Present at ${time}`;
+            presentBtn.remove();
+            absentBtn.remove();
           });
 
           absentBtn.addEventListener("click", () => {
             const time = new Date().toLocaleTimeString();
             timeLog.textContent = `Absent at ${time}`;
+            presentBtn.remove();
+            absentBtn.remove();
           });
         } else {
           presentBtn.disabled = true;
@@ -350,7 +340,6 @@
 
         statusCell.append(presentBtn, absentBtn, deleteBtn, timeLog);
 
-        // --- ADD ROW TO TABLE ---
         row.append(nameCell, pictureCell, statusCell);
         attendanceTable.appendChild(row);
       }

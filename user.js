@@ -1,6 +1,5 @@
 const $ = id => document.getElementById(id);
 
-// Tabs
 $('tab-login').onclick = () => showForm('login');
 $('tab-register').onclick = () => showForm('register');
 $('to-login').onclick = () => showForm('login');
@@ -24,7 +23,6 @@ function showForm(which) {
     }
 }
 
-
 $('login-toggle').onclick = () => togglePwd('login-password', 'login-toggle');
 $('reg-toggle').onclick = () => togglePwd('reg-password', 'reg-toggle');
 
@@ -36,22 +34,19 @@ function togglePwd(id, btn) {
     button.textContent = visible ? 'Hide' : 'Show';
 }
 
-$// PASSWORD STRENGTH METER
 $('reg-password').addEventListener('input', e => {
     const pw = e.target.value;
     const score = passwordScore(pw);
-    const bar = $('pw-meter');    // Targets <i>
+    const bar = $('pw-meter');
 
     const width = score * 20;
     bar.style.width = width + '%';
 
-    // Color scaling based on score
     if (score <= 1) bar.style.background = 'red';
     else if (score <= 3) bar.style.background = 'orange';
     else bar.style.background = 'green';
 });
 
-// Strength calculation
 function passwordScore(p) {
     let s = 0;
     if (p.length >= 6) s++;
@@ -61,7 +56,6 @@ function passwordScore(p) {
     if (p.length >= 10) s++;
     return s;
 }
-
 
 function readUsers() {
     return JSON.parse(localStorage.getItem('users') || '{}');
@@ -85,6 +79,13 @@ $('register-form').onsubmit = e => {
     writeUsers(users);
 
     alert('Account created successfully!');
+
+    $('reg-name').value = '';
+    $('reg-email').value = '';
+    $('reg-password').value = '';
+    $('reg-password-confirm').value = '';
+    $('pw-meter').style.width = '0';
+
     showForm('login');
 }
 
