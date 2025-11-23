@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -17,10 +18,9 @@
       <a href="index.html#contact">Contact</a>
     </nav>
   </header>
+
   <div class="wrap">
-
     <div class="card" role="main">
-
       <div class="hero">
         <div class="brand">
           <div class="logo">
@@ -31,7 +31,6 @@
             <div class="small muted">Easy Attendance for events</div>
           </div>
         </div>
-
         <h1>Welcome!</h1>
         <p class="lead">Log in, create an account, or reset your password.</p>
       </div>
@@ -55,7 +54,7 @@
           </label>
 
           <div class="row-space">
-            <button class="btn primary">Log in</button>
+            <button type="submit" class="btn primary">Log in</button>
             <button type="button" id="forgot-btn" class="link">Forgot Password?</button>
           </div>
         </form>
@@ -83,18 +82,16 @@
             <input type="password" id="reg-password-confirm" required>
           </label>
 
-          <button class="btn primary">Create account</button>
+          <button type="submit" class="btn primary">Create account</button>
           <button type="button" id="to-login" class="btn ghost">Back to login</button>
         </form>
       </div>
-
     </div>
   </div>
 
   <div class="overlay" id="overlay">
     <div class="modal">
       <h3>Reset password</h3>
-
       <form id="forgot-form">
         <label>Email
           <input type="email" id="forgot-email" required>
@@ -102,15 +99,17 @@
 
         <div id="forgot-step-2" style="display:none">
           <label>New password
-            <input type="password" id="forgot-new-password" required>
+            <input type="password" id="forgot-new-password">
           </label>
           <label>Confirm new password
-            <input type="password" id="forgot-new-confirm" required>
+            <input type="password" id="forgot-new-confirm">
           </label>
         </div>
 
-        <button type="button" id="close-modal" class="btn ghost">Cancel</button>
-        <button class="btn primary">Continue</button>
+        <div class="modal-buttons">
+          <button type="button" id="close-modal" class="btn ghost">Cancel</button>
+          <button type="submit" class="btn primary">Continue</button>
+        </div>
       </form>
     </div>
   </div>
