@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="images/school-logo.png">
   <style>
-    
     .header-nav {
       display: flex;
       align-items: center;
@@ -30,11 +29,14 @@
       text-shadow: 0 0 8px #0011ff;
     }
 
-
     .user-icon-container {
       cursor: pointer;
       margin-left: 10px;
       position: relative;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: white;
     }
 
     #userIcon {
@@ -45,7 +47,7 @@
 
     .auth-popup {
       position: absolute;
-      top: 45px;
+      top: 50px;
       right: 0;
       background: #101827;
       padding: 10px;
@@ -80,6 +82,7 @@
       <a href="#contact">Contact</a>
       <div class="user-icon-container">
         <img src="images/1.png" alt="User Icon" id="userIcon">
+        <span id="userEmailDisplay"></span>
         <div id="authPopup" class="auth-popup">
           <button id="loginBtn">Login</button>
           <button id="registerBtn">Create Account</button>
@@ -102,7 +105,7 @@
   <section id="create-attendance" class="content-container">
     <div class="main-content">
       <div class="create-container">
-        <a href="create.html" class="create-link" style="align-items: center;">➕ Create Attendance</a>
+        <a href="create.html" class="create-link">➕ Create Attendance</a>
       </div>
     </div>
   </section>
@@ -110,24 +113,28 @@
   <section id="about" class="content-container">
     <div class="main-content">
       <h2 style="text-align: center;">About Us</h2>
-      <p>The Student Attendance System makes tracking class attendance easy, fast, and efficient. It allows teachers to
-        monitor student participation in real-time, reducing the need for manual roll calls. With just a few clicks,
-        educators can mark attendance, view reports, and manage records accurately. The system ensures that no student
-        is overlooked, helping to identify patterns of absenteeism early. It also promotes accountability among students
-        by keeping them aware of their attendance status. Parents can receive automatic notifications, keeping them
-        informed about their child’s presence in class. The system is user-friendly and designed to save time for
-        teachers while improving record accuracy. Overall, it enhances transparency, communication, and organization in
-        the classroom environment.</p>
+      <p>
+        The Student Attendance System makes tracking class attendance easy, fast, and efficient.
+        It allows teachers to monitor student participation in real-time, reducing the need for manual roll calls.
+        With just a few clicks, educators can mark attendance, view reports, and manage records accurately.
+        The system ensures that no student is overlooked, helping to identify patterns of absenteeism early.
+        It also promotes accountability among students by keeping them aware of their attendance status.
+        Parents can receive automatic notifications, keeping them informed about their child’s presence in class.
+        The system is user-friendly and designed to save time for teachers while improving record accuracy.
+        Overall, it enhances transparency, communication, and organization in the classroom environment.
+      </p>
     </div>
   </section>
 
   <section id="services" class="content-container">
     <div class="main-content">
       <h2 style="text-align: center;">Our Services</h2>
-      <p>We offer an easy-to-use attendance monitoring system for teachers. The system tracks student attendance in real
+      <p>
+        We offer an easy-to-use attendance monitoring system for teachers. The system tracks student attendance in real
         time, helping educators save time and effort. Students can upload proof of attendance, such as photos, for
         verification. Parents receive instant updates about their child’s attendance status. Our goal is to make
-        attendance tracking fast, accurate, and reliable for everyone.</p>
+        attendance tracking fast, accurate, and reliable for everyone.
+      </p>
     </div>
   </section>
 
@@ -142,9 +149,7 @@
 
   <footer id="footerPopup">
     <p>&copy; Attendance Website</p>
-    <a href="feedback.html">
-      <button id="feedbackBtn">💬 Feedback</button>
-    </a>
+    <a href="feedback.html"><button id="feedbackBtn">💬 Feedback</button></a>
   </footer>
 
   <script>
@@ -156,13 +161,9 @@
     logo.onclick = () => {
       modal.style.display = "block";
       modalImg.src = logo.src;
-    }
-
+    };
     closeBtn.onclick = () => modal.style.display = "none";
-
-    window.onclick = (event) => {
-      if (event.target === modal) modal.style.display = "none";
-    }
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
     const userIcon = document.getElementById('userIcon');
     const authPopup = document.getElementById('authPopup');
@@ -170,39 +171,35 @@
     const registerBtn = document.getElementById('registerBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const createLink = document.querySelector('.create-link');
+    const userNameDisplay = document.getElementById('userEmailDisplay');
 
-    userIcon.onclick = (e) => {
+    userIcon.onclick = e => {
       e.stopPropagation();
       authPopup.style.display = authPopup.style.display === 'flex' ? 'none' : 'flex';
     };
+    window.addEventListener('click', () => authPopup.style.display = 'none');
 
     loginBtn.onclick = () => window.location.href = 'user.html';
     registerBtn.onclick = () => window.location.href = 'user.html';
-
     logoutBtn.onclick = () => {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('userEmail');
-      window.location.reload();
+      localStorage.clear();
+      updateAuthDisplay();
     };
 
-    window.addEventListener('click', () => authPopup.style.display = 'none');
-
-    function updateLoginStatus() {
+    function updateAuthDisplay() {
       const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
-      if (isLoggedIn) {
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
-      } else {
-        loginBtn.style.display = 'block';
-        registerBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
-      }
+      const userName = localStorage.getItem('userName');
+
+      loginBtn.style.display = isLoggedIn ? 'none' : 'block';
+      registerBtn.style.display = isLoggedIn ? 'none' : 'block';
+      logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
+
+      userNameDisplay.textContent = isLoggedIn && userName ? userName : '';
     }
 
-    updateLoginStatus();
+    updateAuthDisplay();
 
-    createLink.addEventListener('click', (e) => {
+    createLink.addEventListener('click', e => {
       const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
       if (!isLoggedIn) {
         e.preventDefault();
@@ -211,30 +208,15 @@
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-      const links = document.querySelectorAll("a[data-section]");
       const header = document.querySelector("header");
-
-      links.forEach(link => {
-        link.addEventListener("click", (event) => {
-          event.preventDefault();
-          const section = document.getElementById(link.getAttribute("data-section"));
-          const top = section.getBoundingClientRect().top + window.scrollY - header.offsetHeight - (window.innerHeight - section.offsetHeight) / 3;
-          window.scrollTo({ top, behavior: "smooth" });
-        });
-      });
-
-      const footer = document.getElementById("footerPopup");
-      window.addEventListener("scroll", () => {
-        footer.style.bottom = (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) ? "0" : "-100px";
-      });
-
       let lastScrollY = window.scrollY;
+
       window.addEventListener("scroll", () => {
-        header.style.transform = (window.scrollY > lastScrollY) ? "translateY(-100%)" : "translateY(0)";
+        header.style.transform = window.scrollY > lastScrollY ? "translateY(-100%)" : "translateY(0)";
         lastScrollY = window.scrollY;
       });
 
-      document.addEventListener("mousemove", (e) => {
+      document.addEventListener("mousemove", e => {
         if (e.clientY <= 50) header.style.transform = "translateY(0)";
       });
     });

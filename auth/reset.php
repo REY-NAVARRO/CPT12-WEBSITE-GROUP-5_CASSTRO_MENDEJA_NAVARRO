@@ -4,9 +4,8 @@ include 'db.php';
 $step = $_POST['step'] ?? '';
 $email = strtolower(trim($_POST['email'] ?? ''));
 
-// Step 1: Check if email exists
 if ($step == 1) {
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email=?");
+    $stmt = $conn->prepare("SELECT id FROM system WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
@@ -16,6 +15,7 @@ if ($step == 1) {
     } else {
         echo "not_found";
     }
+
     $stmt->close();
     exit;
 }
@@ -23,19 +23,25 @@ if ($step == 1) {
 if ($step == 2) {
     $password = trim($_POST['password'] ?? '');
     if (!$password) {
-        echo "error"; 
+        echo "error: no password provided"; 
         exit;
     }
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("UPDATE users SET password=? WHERE email=?");
+    $stmt = $conn->prepare("UPDATE system SET password = ? WHERE email = ?");
     $stmt->bind_param("ss", $hash, $email);
+
     if ($stmt->execute()) {
-        echo "success";
+        if ($stmt->affected_rows > 0) {
+            echo "success";
+        } else {
+            echo "error: email not found";
+        }
     } else {
-        echo "error";
+        echo "error: " . $stmt->error;
     }
+
     $stmt->close();
     exit;
 }
