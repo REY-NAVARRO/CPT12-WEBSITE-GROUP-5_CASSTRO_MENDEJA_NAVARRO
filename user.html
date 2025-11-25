@@ -1,120 +1,107 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login/Register</title>
-  <link rel="stylesheet" href="user.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="user.css">
+    <title>User Login</title>
 </head>
 
 <body>
-  <header>
-    <img src="images/school-logo.png" alt="School Logo" class="profile-pic" />
-    <nav class="header-nav">
-      <a href="index.html#home">Home</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
-  </header>
-  <div class="wrap">
 
-    <div class="card" role="main">
+    <div class="wrap">
+        <div class="card">
+            <div class="hero">
+                <div class="brand">
+                    <div class="logo">
+                        <img src="images/school-logo.png">
+                    </div>
+                    <div class="small muted">Easy Attendance for events</div>
+                </div>
 
-      <div class="hero">
-        <div class="brand">
-          <div class="logo">
-            <img src="images/school-logo.png" alt="">
-          </div>
-          <div>
-            <div style="font-weight:800">Student Attendance System</div>
-            <div class="small muted">Easy Attendance for events</div>
-          </div>
+                <h1>Welcome!</h1>
+                <p class="lead">Log in, create an account, or reset your password.</p>
+            </div>
+
+            <div class="form-col">
+                <div class="tabs">
+                    <div id="tab-login" class="tab active">Login</div>
+                    <div id="tab-register" class="tab">Register</div>
+                </div>
+
+                <form id="login-form">
+                    <label>Email
+                        <input type="email" id="login-email" required>
+                    </label>
+
+                    <label>Password
+                        <div class="password-row">
+                            <input type="password" id="login-password" required>
+                            <button type="button" id="login-toggle" class="show-toggle">Show</button>
+                        </div>
+                    </label>
+
+                    <div class="row-space">
+                        <button type="submit" class="btn primary">Log in</button>
+                        <button type="button" id="forgot-btn" class="link">Forgot Password?</button>
+                    </div>
+                </form>
+
+                <form id="register-form" style="display:none;">
+                    <label>Full Name
+                        <input type="text" id="reg-name" required>
+                    </label>
+
+                    <label>Email
+                        <input type="email" id="reg-email" required>
+                    </label>
+
+                    <label>Password
+                        <div class="password-row">
+                            <input type="password" id="reg-password" required>
+                            <button type="button" id="reg-toggle" class="show-toggle">Show</button>
+                        </div>
+                        <div class="meter"><i id="pw-meter"></i></div>
+                    </label>
+
+                    <label>Confirm Password
+                        <input type="password" id="reg-password-confirm" required>
+                    </label>
+
+                    <button type="submit" class="btn primary">Create account</button>
+                    <button type="button" id="to-login" class="btn ghost">Back to login</button>
+                </form>
+            </div>
         </div>
-
-        <h1>Welcome!</h1>
-        <p class="lead">Log in, create an account, or reset your password.</p>
-      </div>
-
-      <div class="form-col">
-        <div class="tabs">
-          <div class="tab active" id="tab-login">Login</div>
-          <div class="tab" id="tab-register">Create account</div>
-        </div>
-
-        <form id="login-form">
-          <label>Email
-            <input type="email" id="login-email" required>
-          </label>
-
-          <label>Password
-            <div class="password-row">
-              <input type="password" id="login-password" required>
-              <button type="button" class="show-toggle" id="login-toggle">Show</button>
-            </div>
-          </label>
-
-          <div class="row-space">
-            <button class="btn primary">Log in</button>
-            <button type="button" id="forgot-btn" class="link">Forgot Password?</button>
-          </div>
-        </form>
-
-        <form id="register-form" style="display:none">
-          <label>Full name
-            <input type="text" id="reg-name" required>
-          </label>
-
-          <label>Email
-            <input type="email" id="reg-email" required>
-          </label>
-
-          <label>Password
-            <div class="password-row">
-              <input type="password" id="reg-password" required>
-              <button type="button" class="show-toggle" id="reg-toggle">Show</button>
-            </div>
-            <div class="meter">
-              <i id="pw-meter"></i>
-            </div>
-          </label>
-
-          <label>Confirm Password
-            <input type="password" id="reg-password-confirm" required>
-          </label>
-
-          <button class="btn primary">Create account</button>
-          <button type="button" id="to-login" class="btn ghost">Back to login</button>
-        </form>
-      </div>
-
     </div>
-  </div>
 
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <h3>Reset password</h3>
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <h3>Reset password</h3>
+            <form id="forgot-form">
+                <label>Email
+                    <input type="email" id="forgot-email" required>
+                </label>
 
-      <form id="forgot-form">
-        <label>Email
-          <input type="email" id="forgot-email" required>
-        </label>
+                <div id="forgot-step-2" style="display:none;">
+                    <label>New Password
+                        <input type="password" id="forgot-new-password" required>
+                    </label>
 
-        <div id="forgot-step-2" style="display:none">
-          <label>New password
-            <input type="password" id="forgot-new-password" required>
-          </label>
-          <label>Confirm new password
-            <input type="password" id="forgot-new-confirm" required>
-          </label>
+                    <label>Confirm New Password
+                        <input type="password" id="forgot-new-confirm" required>
+                    </label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" id="close-modal" class="btn ghost">Cancel</button>
+                    <button type="submit" class="btn primary">Continue</button>
+                </div>
+            </form>
         </div>
-
-        <button type="button" id="close-modal" class="btn ghost">Cancel</button>
-        <button class="btn primary">Continue</button>
-      </form>
     </div>
-  </div>
 
-  <script src="user.js"></script>
+    <script src="user.js"></script>
 </body>
 </html>

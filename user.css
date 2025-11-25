@@ -7,58 +7,6 @@ body {
   backdrop-filter: blur(4px);
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 20px;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(12px);
-  color: #FFD700;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transform: translateY(-100%);
-  animation: slideDown 2s forwards;
-}
-
-header img.profile-pic {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-header img.profile-pic:hover {
-  transform: scale(1.05);
-}
-
-.header-nav a {
-  margin-left: 20px;
-  color: #FFD700;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.header-nav a:hover {
-  color: #fff;
-}
-
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .header-nav {
-    margin-top: 10px;
-  }
-  .header-nav a {
-    margin: 0 10px 10px 0;
-  }
-}
-
 .wrap {
   min-height: 100vh;
   display: flex;
@@ -271,12 +219,6 @@ input:focus {
 @keyframes fadeInUp {
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideDown {
-  to {
     transform: translateY(0);
   }
 }
