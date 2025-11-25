@@ -1,0 +1,184 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #FFD700;
+}
+
+h2,
+h3 {
+    color: #FFD700;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    background: #000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.profile-pic,
+#userIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid gold;
+    cursor: pointer;
+}
+
+.header-nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.header-nav a {
+    color: #FFD700;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.header-nav a:hover {
+    color: #fff;
+}
+
+.user-icon-container {
+    position: relative;
+}
+
+.auth-popup {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #101827;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.auth-popup button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #6ee7b7;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#attendance-form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type="text"] {
+    background: #000;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.create-btn {
+    background: #FFD700;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.create-btn:hover {
+    background: #000;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.section-card {
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #FFD700;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.section-card button {
+    margin-top: 10px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #FFD700;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 5px;
+}
+
+.section-card button:hover {
+    background: #000;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+}
+
+.section-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+}
+
+#search {
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    display: block;
+    background: #000;
+    color: #FFD700;
+    border: 1px solid gold;
+    border-radius: 6px;
+    text-align: center;
+}
+
+#create-attendance .main-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#create-attendance h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#attendance-form {
+    width: 100%;
+}
+main .main-content{
+    text-align: center;
+}
