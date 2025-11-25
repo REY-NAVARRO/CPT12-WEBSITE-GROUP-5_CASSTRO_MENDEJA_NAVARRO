@@ -6,183 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Attendance Sheet</title>
   <link rel="icon" href="images/school-logo.png">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: url("images/2.jpg");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    body::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 0;
-    }
-
-    header,
-    main,
-    .container {
-      position: relative;
-      z-index: 1;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: black;
-      color: gold;
-      padding: 10px 30px;
-      border-bottom: 3px solid gold;
-    }
-
-    .profile-pic {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 2px solid gold;
-    }
-
-    .header-nav a {
-      color: gold;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 40px 0;
-    }
-
-    .container {
-      background-color: rgba(0, 0, 0, 0.85);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
-      width: 700px;
-      text-align: center;
-      border: 2px solid gold;
-    }
-
-    .input-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-
-    #studentName {
-      padding: 10px;
-      width: 65%;
-      border: 1px solid gold;
-      border-radius: 5px;
-      background-color: black;
-      color: white;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-      color: white;
-    }
-
-    th,
-    td {
-      padding: 12px;
-      border-bottom: 1px solid gold;
-    }
-
-    th {
-      background-color: gold;
-      color: black;
-    }
-
-    td {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    .upload-btn,
-    .status-btn {
-      border: none;
-      border-radius: 5px;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .upload-btn {
-      background-color: gold;
-      color: black;
-    }
-
-    .upload-img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 2px solid gold;
-      display: none;
-      margin: auto;
-    }
-
-    .present {
-      background-color: #4caf50;
-      color: white;
-    }
-
-    .absent {
-      background-color: #f44336;
-      color: white;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      color: red;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    #addBtn {
-      padding: 10px 15px;
-      background-color: gold;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    #addBtn:hover {
-      background-color: #e6c200;
-      transform: scale(1.05);
-    }
-  </style>
+  <link rel="stylesheet" href="attendance.css">
 </head>
 
 <body>
+
   <header>
     <img src="images/school-logo.png" alt="School Logo" class="profile-pic" />
     <nav class="header-nav">
@@ -205,9 +33,10 @@
       <table id="attendanceTable">
         <thead>
           <tr>
+            <th>Time Added</th>
             <th>Student Name</th>
             <th>Picture</th>
-            <th>Time Log</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -216,137 +45,143 @@
   </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const addBtn = document.getElementById("addBtn");
-      const studentNameInput = document.getElementById("studentName");
-      const attendanceTable = document.querySelector("#attendanceTable tbody");
+    const addBtn = document.getElementById("addBtn");
+    const studentNameInput = document.getElementById("studentName");
+    const attendanceTable = document.querySelector("#attendanceTable tbody");
 
-      const params = new URLSearchParams(window.location.search);
-      const section = params.get("section") || "default_section";
-      const loggedInEmail = localStorage.getItem("userEmail");
+    let sectionData = JSON.parse(localStorage.getItem("sectionData")) || {
+      creator: localStorage.getItem("userEmail"),
+      students: []
+    };
 
-      let sectionData = JSON.parse(localStorage.getItem(`section_${section}`)) || {};
+    function saveSectionData() {
+      localStorage.setItem("sectionData", JSON.stringify(sectionData));
+    }
 
-      if (!sectionData.creator) {
-        sectionData.creator = loggedInEmail;
-        sectionData.students = [];
-        saveSectionData();
+    function checkIsTeacher() {
+      const email = localStorage.getItem("userEmail");
+      const role = localStorage.getItem("role");
+      return role === "teacher" && email === sectionData.creator;
+    }
+
+    function addStudentRow(student) {
+      const { name, image, status, addedTime } = student;
+
+      const row = document.createElement("tr");
+
+      const timeCell = document.createElement("td");
+      timeCell.textContent = addedTime;
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = name;
+
+      const pictureCell = document.createElement("td");
+      const uploadBtn = document.createElement("button");
+      uploadBtn.textContent = "Upload";
+      uploadBtn.classList.add("upload-btn");
+
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = "image/*";
+      fileInput.style.display = "none";
+
+      const imagePreview = document.createElement("img");
+      imagePreview.classList.add("upload-img");
+      if (image) {
+        imagePreview.src = image;
+        imagePreview.style.display = "block";
+        uploadBtn.style.display = "none";
       }
 
-      const isCreator = loggedInEmail === sectionData.creator;
-
-      sectionData.students.forEach((s) => addStudentRow(s.name, s.image));
-
-      addBtn.addEventListener("click", () => {
-        const name = studentNameInput.value.trim();
-        if (!name) return alert("Please enter a student name.");
-
-        const newStudent = { name, image: null };
-        sectionData.students.push(newStudent);
-        saveSectionData();
-
-        addStudentRow(name, null);
-        studentNameInput.value = "";
-      });
-
-      function addStudentRow(name, imageData) {
-        const row = document.createElement("tr");
-
-        const nameCell = document.createElement("td");
-        nameCell.textContent = name;
-
-        const pictureCell = document.createElement("td");
-        const uploadBtn = document.createElement("button");
-        const imagePreview = document.createElement("img");
-        const fileInput = document.createElement("input");
-
-        uploadBtn.textContent = "Upload";
-        uploadBtn.classList.add("upload-btn");
-
-        fileInput.type = "file";
-        fileInput.accept = "image/*";
-        fileInput.style.display = "none";
-
-        imagePreview.classList.add("upload-img");
-        if (imageData) {
-          imagePreview.src = imageData;
+      uploadBtn.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imagePreview.src = e.target.result;
           imagePreview.style.display = "block";
           uploadBtn.style.display = "none";
-        }
-
-        uploadBtn.addEventListener("click", () => fileInput.click());
-        fileInput.addEventListener("change", () => {
-          const file = fileInput.files[0];
-          if (!file) return;
-
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            imagePreview.src = e.target.result;
-            imagePreview.style.display = "block";
-            uploadBtn.style.display = "none";
-
-            const index = sectionData.students.findIndex((s) => s.name === name);
-            if (index !== -1) {
-              sectionData.students[index].image = e.target.result;
-              saveSectionData();
-            }
-          };
-          reader.readAsDataURL(file);
-        });
-
-        pictureCell.append(uploadBtn, fileInput, imagePreview);
-
-        const statusCell = document.createElement("td");
-        const timeLog = document.createElement("span");
-
-        const presentBtn = document.createElement("button");
-        presentBtn.textContent = "Present";
-        presentBtn.classList.add("status-btn", "present");
-
-        const absentBtn = document.createElement("button");
-        absentBtn.textContent = "Absent";
-        absentBtn.classList.add("status-btn", "absent");
-
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "✖";
-        deleteBtn.classList.add("delete-btn");
-
-        if (isCreator) {
-          presentBtn.addEventListener("click", () => {
-            const time = new Date().toLocaleTimeString();
-            timeLog.textContent = `Present at ${time}`;
-            presentBtn.remove();
-            absentBtn.remove();
-          });
-
-          absentBtn.addEventListener("click", () => {
-            const time = new Date().toLocaleTimeString();
-            timeLog.textContent = `Absent at ${time}`;
-            presentBtn.remove();
-            absentBtn.remove();
-          });
-        } else {
-          presentBtn.disabled = true;
-          absentBtn.disabled = true;
-          presentBtn.style.opacity = 0.5;
-          absentBtn.style.opacity = 0.5;
-        }
-
-        deleteBtn.addEventListener("click", () => {
-          row.remove();
-          sectionData.students = sectionData.students.filter((s) => s.name !== name);
+          const idx = sectionData.students.findIndex(s => s.name === name);
+          sectionData.students[idx].image = e.target.result;
           saveSectionData();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      pictureCell.append(uploadBtn, fileInput, imagePreview);
+
+      const statusCell = document.createElement("td");
+      const presentBtn = document.createElement("button");
+      presentBtn.textContent = "Present";
+      presentBtn.classList.add("status-btn", "present");
+
+      const absentBtn = document.createElement("button");
+      absentBtn.textContent = "Absent";
+      absentBtn.classList.add("status-btn", "absent");
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "✖";
+      deleteBtn.classList.add("delete-btn");
+
+      const statusCircle = document.createElement("div");
+      statusCircle.classList.add("status-circle");
+      if (status === "Present") statusCircle.style.background = "green";
+      if (status === "Absent") statusCircle.style.background = "red";
+
+      if (checkIsTeacher()) {
+        presentBtn.addEventListener("click", () => {
+          statusCircle.style.background = "green";
+          updateStatus("Present");
         });
-
-        statusCell.append(presentBtn, absentBtn, deleteBtn, timeLog);
-
-        row.append(nameCell, pictureCell, statusCell);
-        attendanceTable.appendChild(row);
+        absentBtn.addEventListener("click", () => {
+          statusCircle.style.background = "red";
+          updateStatus("Absent");
+        });
+        deleteBtn.addEventListener("click", () => {
+          if (confirm(`Delete student "${name}"?`)) {
+            row.remove();
+            sectionData.students = sectionData.students.filter(s => s.name !== name);
+            saveSectionData();
+          }
+        });
+      } else {
+        presentBtn.disabled = true;
+        absentBtn.disabled = true;
+        presentBtn.style.opacity = 0.5;
+        absentBtn.style.opacity = 0.5;
+        deleteBtn.style.display = "none";
       }
 
-      function saveSectionData() {
-        localStorage.setItem(`section_${section}`, JSON.stringify(sectionData));
+      function updateStatus(newStatus) {
+        const idx = sectionData.students.findIndex(s => s.name === name);
+        sectionData.students[idx].status = newStatus;
+        saveSectionData();
       }
+      statusCell.classList.add("status-cell");
+      statusCell.append(presentBtn, absentBtn, statusCircle, deleteBtn);
+      row.append(timeCell, nameCell, pictureCell, statusCell);
+      attendanceTable.appendChild(row);
+    }
+
+    sectionData.students.forEach(s => addStudentRow(s));
+
+    addBtn.addEventListener("click", () => {
+      const name = studentNameInput.value.trim();
+      if (!name) return alert("Enter student name.");
+      if (sectionData.students.some(s => s.name === name)) {
+        return alert("Student already exists.");
+      }
+      const newStudent = {
+        name,
+        image: null,
+        status: "",
+        addedTime: new Date().toLocaleTimeString()
+      };
+      sectionData.students.push(newStudent);
+      saveSectionData();
+      addStudentRow(newStudent);
+      studentNameInput.value = "";
     });
   </script>
 

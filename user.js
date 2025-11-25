@@ -1,110 +1,135 @@
 const $ = id => document.getElementById(id);
 
-$('tab-login').onclick = () => showForm('login');
-$('tab-register').onclick = () => showForm('register');
-$('to-login').onclick = () => showForm('login');
+const tabLogin = $('tab-login');
+const tabRegister = $('tab-register');
+const loginForm = $('login-form');
+const registerForm = $('register-form');
+const toLoginBtn = $('to-login');
 
-function showForm(which) {
-    const loginForm = $('login-form');
-    const registerForm = $('register-form');
+tabLogin.onclick = () => showForm('login');
+tabRegister.onclick = () => showForm('register');
+toLoginBtn.onclick = () => showForm('login');
 
-    $('tab-login').classList.toggle('active', which === 'login');
-    $('tab-register').classList.toggle('active', which === 'register');
-
-    loginForm.style.display = which === 'login' ? 'block' : 'none';
-    registerForm.style.display = which === 'register' ? 'block' : 'none';
+function showForm(which){
+    if(which === 'login'){
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        loginForm.style.display = 'grid';
+        registerForm.style.display = 'none';
+    } else {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'grid';
+    }
 }
 
-$('login-toggle').onclick = () => togglePwd('login-password', 'login-toggle');
-$('reg-toggle').onclick = () => togglePwd('reg-password', 'reg-toggle');
+$('login-toggle').onclick = () => togglePwd('login-password','login-toggle');
+$('reg-toggle').onclick = () => togglePwd('reg-password','reg-toggle');
 
-function togglePwd(inputId, btnId) {
-    const input = $(inputId);
-    const btn = $(btnId);
-    const show = input.type === 'password';
-    input.type = show ? 'text' : 'password';
-    btn.textContent = show ? 'Hide' : 'Show';
+function togglePwd(id,btn){
+    const input = $(id);
+    const button = $(btn);
+    if(input.type === 'password'){
+        input.type = 'text';
+        button.textContent = 'Hide';
+    } else {
+        input.type = 'password';
+        button.textContent = 'Show';
+    }
 }
 
-$('reg-password').addEventListener('input', e => {
+$('reg-password').oninput = e => {
     const pw = e.target.value;
     const score = passwordScore(pw);
-    const bar = $('pw-meter');
-    bar.style.width = (score * 20) + '%';
-    bar.style.background = score <= 1 ? 'red' : score <= 3 ? 'orange' : 'green';
-});
-
-function passwordScore(pw) {
-    let score = 0;
-    if (pw.length >= 6) score++;
-    if (/[A-Z]/.test(pw)) score++;
-    if (/[0-9]/.test(pw)) score++;
-    if (/[!@#$]/.test(pw)) score++;
-    if (pw.length >= 10) score++;
-    return score;
+    $('pw-meter').style.width = (score*20)+'%';
 }
 
-$('register-form').onsubmit = e => {
+function passwordScore(p){
+    let s=0;
+    if(p.length>=6)s++;
+    if(/[A-Z]/.test(p))s++;
+    if(/[0-9]/.test(p))s++;
+    if(/[!@#$]/.test(p))s++;
+    if(p.length>=10)s++;
+    return s;
+}
+
+function readUsers(){
+    return JSON.parse(localStorage.getItem('users')||'{}');
+}
+function writeUsers(users){
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+registerForm.onsubmit = e => {
     e.preventDefault();
     const name = $('reg-name').value.trim();
     const email = $('reg-email').value.trim().toLowerCase();
     const pw = $('reg-password').value;
     const pwc = $('reg-password-confirm').value;
+    const role = $('reg-role').value; // NEW: role selector
 
-    if (pw !== pwc) {
-        alert("Passwords do not match!");
-        return;
-    }
+    if(!role){ alert('Please select a role'); return; }
+    if(pw !== pwc){ alert('Passwords do not match'); return; }
 
-    const data = new FormData();
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", pw);
+    const users = readUsers();
+    if(users[email]){ alert('Email already exists'); return; }
 
-    fetch("auth/register.php", { method: "POST", body: data })
-        .then(r => r.json()) 
-        .then(result => {
-            if (result.status === "success") {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('userEmail', result.email);
-                localStorage.setItem('userName', result.name);
-                alert("Account created! Logged in successfully.");
-                window.location.href = "index.html";
-            } else if (result.message && result.message.includes("Email")) {
-                alert("Email already exists!");
-            } else {
-                alert("Error: " + (result.message || "Unknown error"));
-            }
-        })
-        .catch(err => alert("Fetch error: " + err));
+    users[email] = { name, email, password: pw, role };
+    writeUsers(users);
 
-};
+    alert('Account created successfully!');
+    showForm('login');
+}
 
-$('login-form').onsubmit = e => {
+loginForm.onsubmit = e => {
     e.preventDefault();
     const email = $('login-email').value.trim().toLowerCase();
     const pw = $('login-password').value;
+    const users = readUsers();
 
-    const data = new FormData();
-    data.append("email", email);
-    data.append("password", pw);
+    if(!users[email]){ alert('Account not found'); return; }
+    if(users[email].password !== pw){ alert('Wrong password'); return; }
 
-    fetch("auth/login.php", { method: "POST", body: data })
-        .then(r => r.json())
-        .then(result => {
-            if (result.status === "success") {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('userEmail', result.email);
-                localStorage.setItem('userName', result.name);
-                alert("Login successful!");
-                window.location.href = "index.html";
-            } else if (result.status === "not_found") {
-                alert("Account not found");
-            } else if (result.status === "wrong_password") {
-                alert("Wrong password");
-            } else {
-                alert("Error: " + (result.message || "Unknown error"));
-            }
-        })
-        .catch(err => alert("Fetch error: " + err));
-};
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('userEmail', email);
+    localStorage.setItem('userName', users[email].name);
+    localStorage.setItem('role', users[email].role); 
+
+    alert('Login successful!');
+    window.location.href = 'index.html'; 
+
+const overlay = $('overlay');
+$('forgot-btn').onclick = () => overlay.style.display='flex';
+$('close-modal').onclick = () => {
+    overlay.style.display='none';
+    $('forgot-step-2').style.display='none';
+}
+
+const forgotForm = $('forgot-form');
+const step2 = $('forgot-step-2');
+
+forgotForm.onsubmit = e => {
+    e.preventDefault();
+    const email = $('forgot-email').value.trim().toLowerCase();
+    const users = readUsers();
+
+    if(step2.style.display === 'none'){
+        if(!users[email]){ alert('Email not found'); return; }
+        step2.style.display='block';
+        return;
+    }
+
+    const npw = $('forgot-new-password').value;
+    const cpw = $('forgot-new-confirm').value;
+
+    if(npw !== cpw){ alert('Passwords do not match'); return; }
+
+    users[email].password = npw;
+    writeUsers(users);
+
+    alert('Password reset successful!');
+    overlay.style.display='none';
+    step2.style.display='none';
+}

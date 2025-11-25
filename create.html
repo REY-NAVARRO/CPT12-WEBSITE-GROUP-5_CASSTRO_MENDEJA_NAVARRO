@@ -6,181 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Attendance</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="images/school-logo.png">
-  <style>
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 20px;
-      background: #000;
-      color: #FFD700;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .profile-pic {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      border: 2px solid gold;
-    }
-
-    .header-nav {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .header-nav a {
-      color: #FFD700;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-
-    .header-nav a:hover {
-      color: #fff;
-    }
-
-    .user-icon-container {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-    }
-
-    #userIcon {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-    }
-
-    .auth-popup {
-      position: absolute;
-      top: 55px;
-      right: 0;
-      background: #101827;
-      padding: 10px;
-      border-radius: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-    }
-
-    .auth-popup button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      background: #6ee7b7;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header-nav {
-        margin-top: 10px;
-        flex-wrap: wrap;
-      }
-
-      .header-nav a {
-        margin: 0 10px 10px 0;
-      }
-    }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .section-card {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      border: 1px solid #FFD700;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .section-card h3 {
-      margin-bottom: 10px;
-      color: #FFD700;
-    }
-
-    .section-card p {
-      color: #ddd;
-    }
-
-    .section-card button {
-      margin-top: 10px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      background: #FFD700;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-      margin-right: 5px;
-    }
-
-    .section-card button:hover {
-      background: #000;
-      color: #FFD700;
-      border: 1px solid #FFD700;
-    }
-
-    .section-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
-    }
-
-    .create-btn {
-      background: #FFD700;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .create-btn:hover {
-      background: #000;
-      color: #FFD700;
-      border: 1px solid #FFD700;
-    }
-
-    input[type="text"] {
-      background: #000;
-      color: #FFD700;
-      border: 1px solid #FFD700;
-      padding: 10px;
-      border-radius: 6px;
-      width: 100%;
-    }
-
-    #attendance-form {
-      max-width: 400px;
-      margin: 0 auto;
-      text-align: center;
-    }
-  </style>
+  <link rel="icon" href="images/school-logo.png" />
+  <link rel="stylesheet" href="create.css">
 </head>
 
 <body>
@@ -240,60 +67,66 @@
       const registerBtn = document.getElementById('registerBtn');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      const currentUser = localStorage.getItem('currentUser') || 'guest';
+      const userEmail = localStorage.getItem('userEmail');
+      const userRole = localStorage.getItem('role');
+
+      if (userRole !== 'teacher') form.style.display = 'none';
+
       let sections = JSON.parse(localStorage.getItem('sections')) || [];
 
-      sections
-        .filter(sec => sec.owner === currentUser)
-        .forEach(sec => createCard(sec.id, sec.section, sec.subject));
+      sections.forEach(sec => {
+        if (userRole === 'teacher' && sec.owner !== userEmail) return;
+        createCard(sec.id, sec.section, sec.subject, sec.owner);
+      });
 
-      form.addEventListener('submit', (e) => {
+      form.addEventListener('submit', e => {
         e.preventDefault();
+        if (userRole !== 'teacher') return alert("Only teachers can create sections.");
+        if (!userEmail) return alert("You must be logged in to create a section.");
+
         const section = document.getElementById('section').value.trim();
         const subject = document.getElementById('subject').value.trim();
         if (!section || !subject) return;
 
-        const exists = sections.some(
-          s => s.section === section && s.subject === subject && s.owner === currentUser
-        );
-        if (exists) {
-          alert("You already have this section!");
-          return;
-        }
+        const exists = sections.some(s => s.section === section && s.subject === subject && s.owner === userEmail);
+        if (exists) return alert("You already created this section.");
 
-        const newSection = { id: Date.now(), section, subject, owner: currentUser };
+        const newSection = { id: Date.now(), section, subject, owner: userEmail };
         sections.push(newSection);
         localStorage.setItem('sections', JSON.stringify(sections));
-        createCard(newSection.id, section, subject);
+        createCard(newSection.id, section, subject, userEmail);
         form.reset();
       });
 
-      function createCard(id, section, subject) {
+      function createCard(id, section, subject, owner) {
         const card = document.createElement('div');
         card.className = 'section-card';
         card.innerHTML = `
-      <h3>${section}</h3>
-      <p>${subject}</p>
-      <button class="open-btn">Open Attendance</button>
-      <button class="delete-btn">❌ Delete</button>
-    `;
-
-        card.querySelector('.open-btn').addEventListener('click', () => {
-          window.location.href = `attendance.html?section=${encodeURIComponent(section)}&subject=${encodeURIComponent(subject)}`;
-        });
-
-        card.querySelector('.delete-btn').addEventListener('click', () => {
-          if (!confirm(`Delete section "${section}"?`)) return;
-
-          sections = sections.filter(s => !(s.id === id && s.owner === currentUser));
-          localStorage.setItem('sections', JSON.stringify(sections));
-          card.remove();
-        });
+          <h3>${section}</h3>
+          <p>${subject}</p>
+          <button class="open-btn">Open Attendance</button>
+          ${userRole === 'teacher' ? '<button class="delete-btn">❌ Delete</button>' : ''}
+        `;
 
         sectionGrid.appendChild(card);
+
+        card.querySelector('.open-btn').addEventListener('click', () => {
+          window.location.href = `attendance.html?section=${encodeURIComponent(section)}&subject=${encodeURIComponent(subject)}&owner=${encodeURIComponent(owner)}`;
+        });
+
+        const delBtn = card.querySelector('.delete-btn');
+        if (delBtn) {
+          delBtn.addEventListener('click', () => {
+            if (!confirm(`Delete section "${section}"?`)) return;
+            sections = sections.filter(s => !(s.id === id && s.owner === userEmail));
+            localStorage.setItem('sections', JSON.stringify(sections));
+            card.remove();
+          });
+        }
       }
 
-      searchInput.addEventListener("input", () => {
+      // SEARCH
+      searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
         document.querySelectorAll(".section-card").forEach(card => {
           const title = card.querySelector("h3").textContent.toLowerCase();
@@ -301,11 +134,10 @@
         });
       });
 
-      userIcon.addEventListener('click', (e) => {
+      userIcon.addEventListener('click', e => {
         e.stopPropagation();
         authPopup.style.display = authPopup.style.display === 'flex' ? 'none' : 'flex';
       });
-
       window.addEventListener('click', () => authPopup.style.display = 'none');
 
       loginBtn.onclick = () => window.location.href = 'user.html';
@@ -313,7 +145,8 @@
       logoutBtn.onclick = () => {
         localStorage.removeItem('loggedIn');
         localStorage.removeItem('userEmail');
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('role');
         window.location.reload();
       };
 
@@ -323,12 +156,8 @@
         registerBtn.style.display = isLoggedIn ? 'none' : 'block';
         logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
       }
-
       updateLoginStatus();
     });
-
-
   </script>
 </body>
-
 </html>

@@ -226,3 +226,7 @@ html {
   color: #FFD700;
   border: 1px solid #FFD700;
 }
+
+#contact .main-content {
+  text-align: left;
+}

@@ -1,0 +1,209 @@
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url("images/2.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    header,
+    main,
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 10px 30px;
+      border-bottom: 3px solid gold;
+    }
+
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid gold;
+    }
+
+    .header-nav a {
+      color: gold;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 20px;
+      justify-content: flex-end;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .header-nav a {
+      color: gold;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.659);
+    }
+
+    .status-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .status-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      display: inline-block;
+      margin: 0;
+    }
+
+    .header-nav a:hover {
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 10px;
+      min-width: 600px;
+      text-align: center;
+      border: 2px solid gold;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    #studentName {
+      padding: 10px;
+      width: 65%;
+      border: 1px solid gold;
+      border-radius: 5px;
+      background-color: black;
+      color: #c2a400;
+    }
+
+    #addBtn,
+    .upload-btn,
+    .status-btn {
+      border: none;
+      border-radius: 5px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    #addBtn,
+    .upload-btn {
+      background-color: gold;
+      color: black;
+    }
+
+    #addBtn:hover,
+    .upload-btn:hover {
+      background-color: #e6c200;
+      transform: scale(1.05);
+    }
+
+    .upload-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid gold;
+      display: none;
+      margin: auto;
+    }
+
+    .present {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .absent {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: red;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      color: white;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid gold;
+    }
+
+    th {
+      background-color: gold;
+      color: black;
+    }
+
+    td {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .status-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      display: inline-block;
+      margin-left: 10px;
+    }

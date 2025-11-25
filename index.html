@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendance System</title>
+  <title>Professor Dashboard - Attendance System</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="images/school-logo.png">
   <style>
@@ -15,28 +15,10 @@
       position: relative;
     }
 
-    header {
-      transition: transform 0.5s ease, backdrop-filter 5s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .header-nav a {
-      transition: 0.3s;
-    }
-
-    .header-nav a:hover {
-      color: #ffffff;
-      text-shadow: 0 0 8px #0011ff;
-    }
-
     .user-icon-container {
       cursor: pointer;
       margin-left: 10px;
       position: relative;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: white;
     }
 
     #userIcon {
@@ -47,7 +29,7 @@
 
     .auth-popup {
       position: absolute;
-      top: 50px;
+      top: 45px;
       right: 0;
       background: #101827;
       padding: 10px;
@@ -68,6 +50,46 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    .content-container {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .main-content {
+      margin-bottom: 30px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -82,7 +104,6 @@
       <a href="#contact">Contact</a>
       <div class="user-icon-container">
         <img src="images/1.png" alt="User Icon" id="userIcon">
-        <span id="userEmailDisplay"></span>
         <div id="authPopup" class="auth-popup">
           <button id="loginBtn">Login</button>
           <button id="registerBtn">Create Account</button>
@@ -104,8 +125,12 @@
 
   <section id="create-attendance" class="content-container">
     <div class="main-content">
-      <div class="create-container">
-        <a href="create.html" class="create-link">➕ Create Attendance</a>
+      <h2 style="text-align: center;">Create Attendance</h2>
+      <p style="text-align: center;">To create a new attendance sheet, click the button below:</p>
+      <div style="text-align: center; margin-top: 10px;">
+        <a href="create.html" class="create-link"
+          style="padding: 10px 20px; background: #6ee7b7; color: black; font-weight: bold; border-radius: 6px; text-decoration: none;">Create
+          Attendance</a>
       </div>
     </div>
   </section>
@@ -113,110 +138,112 @@
   <section id="about" class="content-container">
     <div class="main-content">
       <h2 style="text-align: center;">About Us</h2>
-      <p>
-        The Student Attendance System makes tracking class attendance easy, fast, and efficient.
-        It allows teachers to monitor student participation in real-time, reducing the need for manual roll calls.
-        With just a few clicks, educators can mark attendance, view reports, and manage records accurately.
-        The system ensures that no student is overlooked, helping to identify patterns of absenteeism early.
-        It also promotes accountability among students by keeping them aware of their attendance status.
-        Parents can receive automatic notifications, keeping them informed about their child’s presence in class.
-        The system is user-friendly and designed to save time for teachers while improving record accuracy.
-        Overall, it enhances transparency, communication, and organization in the classroom environment.
-      </p>
+      <p>The Student Attendance System makes tracking class attendance easy, fast, and efficient. It allows teachers to
+        monitor student participation in real-time, reducing the need for manual roll calls. With just a few clicks,
+        educators can mark attendance, view reports, and manage records accurately. The system ensures that no student
+        is overlooked, helping to identify patterns of absenteeism early. It also promotes accountability among students
+        by keeping them aware of their attendance status. Parents can receive automatic notifications, keeping them
+        informed about their child’s presence in class. It is user-friendly and designed to save time for teachers while
+        improving record accuracy.</p>
+      <p>The system is also designed with simplicity in mind. Teachers can generate reports, export attendance data, and
+        quickly identify students with irregular attendance patterns. It integrates seamlessly with school systems and
+        provides a reliable way to maintain accurate attendance records. The interface is intuitive, responsive, and
+        ensures smooth operation across all devices.</p>
     </div>
   </section>
 
   <section id="services" class="content-container">
     <div class="main-content">
       <h2 style="text-align: center;">Our Services</h2>
-      <p>
-        We offer an easy-to-use attendance monitoring system for teachers. The system tracks student attendance in real
+      <p>We offer an easy-to-use attendance monitoring system for teachers. The system tracks student attendance in real
         time, helping educators save time and effort. Students can upload proof of attendance, such as photos, for
         verification. Parents receive instant updates about their child’s attendance status. Our goal is to make
-        attendance tracking fast, accurate, and reliable for everyone.
-      </p>
+        attendance tracking fast, accurate, and reliable for everyone.</p>
+      <p>Additional features include detailed reporting, attendance analytics, and customizable alerts.</p>
     </div>
   </section>
 
   <section id="contact" class="content-container">
     <div class="main-content">
-      <h2 style="text-align: center">Contact Us</h2>
-      <p>Email: AttendanceSystem@Gmail.com</p>
-      <p>Location: SLSU LUCENA IBABANG DUPAY</p>
-      <p>No. 09123456789</p>
+      <h2 style="text-align: center;">Contact Us</h2>
+      <p style="text-align: center;">Have questions or feedback? Reach out to us using the form below.</p>
+      <div style="max-width: 500px; margin: auto; text-align: left;">
+        <p style="text-align: center;">FACEBOOK: studentattendance</p>
+        <p style="text-align: center;">INSTAGRAM: studentattendance</p>
+        <p style="text-align: center;">EMAIL: studentattendance@gmail.com</p>
+      </div>
     </div>
   </section>
 
   <footer id="footerPopup">
-    <p>&copy; Attendance Website</p>
-    <a href="feedback.html"><button id="feedbackBtn">💬 Feedback</button></a>
+    <p style="text-align:center;">
+      &copy; 2025 Attendance System |
+      <a href="feedback.html" style="color:#6ee7b7; text-decoration: none;">Feedback</a>
+    </p>
   </footer>
 
   <script>
-    const modal = document.getElementById("imageModal");
-    const logo = document.getElementById("logo");
-    const modalImg = document.getElementById("modalImg");
-    const closeBtn = document.querySelector(".close");
-
-    logo.onclick = () => {
-      modal.style.display = "block";
-      modalImg.src = logo.src;
-    };
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
-
-    const userIcon = document.getElementById('userIcon');
-    const authPopup = document.getElementById('authPopup');
-    const loginBtn = document.getElementById('loginBtn');
-    const registerBtn = document.getElementById('registerBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const createLink = document.querySelector('.create-link');
-    const userNameDisplay = document.getElementById('userEmailDisplay');
-
-    userIcon.onclick = e => {
-      e.stopPropagation();
-      authPopup.style.display = authPopup.style.display === 'flex' ? 'none' : 'flex';
-    };
-    window.addEventListener('click', () => authPopup.style.display = 'none');
-
-    loginBtn.onclick = () => window.location.href = 'user.html';
-    registerBtn.onclick = () => window.location.href = 'user.html';
-    logoutBtn.onclick = () => {
-      localStorage.clear();
-      updateAuthDisplay();
-    };
-
-    function updateAuthDisplay() {
-      const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
-      const userName = localStorage.getItem('userName');
-
-      loginBtn.style.display = isLoggedIn ? 'none' : 'block';
-      registerBtn.style.display = isLoggedIn ? 'none' : 'block';
-      logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
-
-      userNameDisplay.textContent = isLoggedIn && userName ? userName : '';
-    }
-
-    updateAuthDisplay();
-
-    createLink.addEventListener('click', e => {
-      const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
-      if (!isLoggedIn) {
-        e.preventDefault();
-        alert('You need an account to create attendance. Please log in or create an account.');
-      }
-    });
-
     document.addEventListener("DOMContentLoaded", () => {
       const header = document.querySelector("header");
-      let lastScrollY = window.scrollY;
+      const footer = document.getElementById("footerPopup");
+      const userIcon = document.getElementById('userIcon');
+      const authPopup = document.getElementById('authPopup');
+      const loginBtn = document.getElementById('loginBtn');
+      const registerBtn = document.getElementById('registerBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const logo = document.getElementById("logo");
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("modalImg");
+      const closeBtn = document.querySelector(".close");
 
+      function updateLoginStatus() {
+        const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+        loginBtn.style.display = isLoggedIn ? 'none' : 'block';
+        registerBtn.style.display = isLoggedIn ? 'none' : 'block';
+        logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
+      }
+      updateLoginStatus();
+
+      loginBtn.onclick = () => window.location.href = 'user.html';
+      registerBtn.onclick = () => window.location.href = 'user.html';
+      logoutBtn.onclick = () => {
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('userEmail');
+        updateLoginStatus();
+        window.location.reload();
+      };
+
+      userIcon.onclick = (e) => {
+        e.stopPropagation();
+        authPopup.style.display = authPopup.style.display === 'flex' ? 'none' : 'flex';
+      };
+      window.addEventListener('click', () => authPopup.style.display = 'none');
+
+      logo.onclick = () => {
+        modal.style.display = 'block';
+        modalImg.src = logo.src;
+      }
+      closeBtn.onclick = () => modal.style.display = 'none';
+      window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; }
+
+      document.querySelectorAll("a[href^='#']").forEach(link => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const section = document.querySelector(link.getAttribute("href"));
+          const offset = header.offsetHeight + 20;
+          window.scrollTo({ top: section.offsetTop - offset, behavior: "smooth" });
+        });
+      });
+
+      let lastScrollY = window.scrollY;
       window.addEventListener("scroll", () => {
         header.style.transform = window.scrollY > lastScrollY ? "translateY(-100%)" : "translateY(0)";
         lastScrollY = window.scrollY;
+
+        footer.style.bottom = (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) ? "0" : "-100px";
       });
 
-      document.addEventListener("mousemove", e => {
+      document.addEventListener("mousemove", (e) => {
         if (e.clientY <= 50) header.style.transform = "translateY(0)";
       });
     });
