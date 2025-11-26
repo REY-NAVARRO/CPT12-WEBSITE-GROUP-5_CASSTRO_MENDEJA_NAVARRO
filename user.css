@@ -22,11 +22,11 @@ body {
   grid-template-columns: 1fr 380px;
   border-radius: 18px;
   overflow: hidden;
-  background: linear-gradient(135deg, #d22d68 0%, #0f0f16 48%);
-  box-shadow: 0 0 25px rgba(255, 0, 120, 0.35);
+  background: linear-gradient(135deg, #0b0b0f 0%, #1a1a27 60%);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInUp 2s forwards;
+  animation: fadeInUp 1.8s forwards;
 }
 
 .hero {
@@ -41,11 +41,12 @@ body {
   font-weight: 800;
   margin-bottom: 12px;
   text-transform: uppercase;
+  color: #FFD700;
 }
 
 .hero p {
   font-size: 14px;
-  color: #ddd;
+  color: #e2e2e2;
   max-width: 330px;
 }
 
@@ -69,9 +70,9 @@ body {
 }
 
 .form-col {
-  background: #12121c;
+  background: #0d0d12;
   padding: 40px;
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  border-left: 2px solid rgba(255, 215, 0, 0.25);
 }
 
 .tabs {
@@ -84,14 +85,14 @@ body {
   cursor: pointer;
   padding-bottom: 10px;
   font-weight: bold;
-  color: #888;
+  color: #b5b5b5;
   border-bottom: 2px solid transparent;
   transition: color 0.3s, border-bottom 0.3s;
 }
 
 .tab.active {
-  color: #ff3f82;
-  border-bottom: 2px solid #ff3f82;
+  color: #FFD700;
+  border-bottom: 2px solid #FFD700;
 }
 
 label {
@@ -100,6 +101,7 @@ label {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 18px;
+  color: #e8e8e8;
 }
 
 input {
@@ -116,7 +118,7 @@ input {
 }
 
 input:focus {
-  border-bottom: 2px solid #ff3f82;
+  border-bottom: 2px solid #FFD700;
 }
 
 .password-row {
@@ -133,10 +135,10 @@ input:focus {
   position: absolute;
   right: 10px;
   padding: 6px 12px;
-  background: #29293a;
-  color: #fff;
+  background: #19191f;
+  color: #FFD700;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #FFD700;
   cursor: pointer;
   font-size: 12px;
 }
@@ -152,26 +154,25 @@ input:focus {
 
 .btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 20px rgba(255, 63, 130, 0.5);
 }
 
 .btn.primary {
-  background: linear-gradient(to right, #ff3f82, #c31d5a);
+  background: linear-gradient(to right, #FFD700, #b89600);
   font-weight: bold;
-  color: #fff;
-  box-shadow: 0 0 15px rgba(255, 0, 120, 0.4);
+  color: #0b0b0f;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.45);
 }
 
 .btn.ghost {
   background: transparent;
-  border: 1px solid #444;
-  color: #bbb;
+  border: 1px solid #FFD700;
+  color: #FFD700;
 }
 
 .link {
   background: none;
   border: none;
-  color: #ff3f82;
+  color: #FFD700;
   cursor: pointer;
   text-decoration: underline;
 }
@@ -186,7 +187,7 @@ input:focus {
   margin-top: 5px;
   height: 6px;
   width: 100%;
-  background: #1e293b;
+  background: #1e1e1e;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -195,6 +196,7 @@ input:focus {
   display: block;
   height: 100%;
   width: 0%;
+  background: #FFD700;
   transition: width 0.3s ease;
 }
 
@@ -209,11 +211,12 @@ input:focus {
 }
 
 .modal {
-  background: #181824;
+  background: #12121c;
   padding: 25px;
   border-radius: 12px;
   width: 90%;
   max-width: 380px;
+  border: 2px solid #FFD700;
 }
 
 @keyframes fadeInUp {

@@ -99,6 +99,7 @@ loginForm.onsubmit = e => {
 
     alert('Login successful!');
     window.location.href = 'index.html'; 
+};
 
 const overlay = $('overlay');
 $('forgot-btn').onclick = () => overlay.style.display='flex';
