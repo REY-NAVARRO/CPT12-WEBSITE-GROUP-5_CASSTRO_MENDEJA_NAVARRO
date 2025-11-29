@@ -5,7 +5,248 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>User Auth — Login/Register/Forgot</title>
-    <link rel="stylesheet" href="user.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Poppins, sans-serif;
+            background: url("images/W.png") no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0b0b0f 0%, #1a1a27 60%);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.8s forwards;
+        }
+
+        .hero {
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            color: #FFD700;
+        }
+
+        .hero p {
+            font-size: 14px;
+            color: #e2e2e2;
+            max-width: 330px;
+        }
+
+        .hero .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .form-col {
+            background: #0d0d12;
+            padding: 40px;
+            border-left: 2px solid rgba(255, 215, 0, 0.25);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            cursor: pointer;
+            padding-bottom: 10px;
+            font-weight: bold;
+            color: #b5b5b5;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+
+        .tab.active {
+            color: #FFD700;
+            border-bottom: 2px solid #FFD700;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 18px;
+            color: #e8e8e8;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: #1a1a27;
+            color: #fff;
+            border-bottom: 2px solid #333;
+            transition: border-bottom 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .password-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-row input {
+            padding-right: 80px;
+        }
+
+        .show-toggle {
+            position: absolute;
+            right: 10px;
+            padding: 6px 12px;
+            background: #19191f;
+            color: #FFD700;
+            border-radius: 5px;
+            border: 1px solid #FFD700;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn.primary {
+            background: linear-gradient(to right, #FFD700, #b89600);
+            font-weight: bold;
+            color: #0b0b0f;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.45);
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+        }
+
+        .link {
+            background: none;
+            border: none;
+            color: #FFD700;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .row-space {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .meter {
+            margin-top: 5px;
+            height: 6px;
+            width: 100%;
+            background: #1e1e1e;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .meter i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: #FFD700;
+            transition: width 0.3s ease;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal {
+            background: #12121c;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 380px;
+            border: 2px solid #FFD700;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -19,13 +260,13 @@
                         <img src="images/school-logo.png" alt="">
                     </div>
                     <div>
-                        <div style="font-weight:800">Studen Attendance System</div>
+                        <div style="font-weight:800">Student Attendance System</div>
                         <div class="small muted">Easy Attendance for events</div>
                     </div>
                 </div>
 
                 <h1>Welcome!</h1>
-                <p class="lead">Log in, create an account, or reset your password. Enjoy our website </p>
+                <p class="lead">Log in, create an account, or reset your password. Enjoy our website</p>
             </div>
 
             <div class="form-col">
@@ -112,7 +353,144 @@
         </div>
     </div>
 
-    <script src="user.js"></script>
+    <script>
+        const $ = id => document.getElementById(id);
+
+        const tabLogin = $('tab-login');
+        const tabRegister = $('tab-register');
+        const loginForm = $('login-form');
+        const registerForm = $('register-form');
+        const toLoginBtn = $('to-login');
+
+        tabLogin.onclick = () => showForm('login');
+        tabRegister.onclick = () => showForm('register');
+        toLoginBtn.onclick = () => showForm('login');
+
+        function showForm(which) {
+            if (which === 'login') {
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+                loginForm.style.display = 'grid';
+                registerForm.style.display = 'none';
+            } else {
+                tabRegister.classList.add('active');
+                tabLogin.classList.remove('active');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'grid';
+            }
+        }
+
+        $('login-toggle').onclick = () => togglePwd('login-password', 'login-toggle');
+        $('reg-toggle').onclick = () => togglePwd('reg-password', 'reg-toggle');
+
+        function togglePwd(id, btn) {
+            const input = $(id);
+            const button = $(btn);
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                button.textContent = 'Show';
+            }
+        }
+
+        $('reg-password').oninput = e => {
+            const pw = e.target.value;
+            const score = passwordScore(pw);
+            $('pw-meter').style.width = (score * 20) + '%';
+        }
+
+        function passwordScore(p) {
+            let s = 0;
+            if (p.length >= 6) s++;
+            if (/[A-Z]/.test(p)) s++;
+            if (/[0-9]/.test(p)) s++;
+            if (/[!@#$]/.test(p)) s++;
+            if (p.length >= 10) s++;
+            return s;
+        }
+
+        function readUsers() {
+            return JSON.parse(localStorage.getItem('users') || '{}');
+        }
+        function writeUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        registerForm.onsubmit = e => {
+            e.preventDefault();
+            const name = $('reg-name').value.trim();
+            const email = $('reg-email').value.trim().toLowerCase();
+            const pw = $('reg-password').value;
+            const pwc = $('reg-password-confirm').value;
+            const role = $('reg-role').value;
+
+            if (!role) { alert('Please select a role'); return; }
+            if (pw !== pwc) { alert('Passwords do not match'); return; }
+
+            const users = readUsers();
+            if (users[email]) { alert('Email already exists'); return; }
+
+            users[email] = { name, email, password: pw, role };
+            writeUsers(users);
+
+            alert('Account created successfully!');
+            showForm('login');
+        }
+
+        loginForm.onsubmit = e => {
+            e.preventDefault();
+            const email = $('login-email').value.trim().toLowerCase();
+            const pw = $('login-password').value;
+            const users = readUsers();
+
+            if (!users[email]) { alert('Account not found'); return; }
+            if (users[email].password !== pw) { alert('Wrong password'); return; }
+
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', users[email].name);
+            localStorage.setItem('role', users[email].role);
+
+            alert('Login successful!');
+            window.location.href = 'index.html';
+        };
+
+        const overlay = $('overlay');
+        $('forgot-btn').onclick = () => overlay.style.display = 'flex';
+        $('close-modal').onclick = () => {
+            overlay.style.display = 'none';
+            $('forgot-step-2').style.display = 'none';
+        }
+
+        const forgotForm = $('forgot-form');
+        const step2 = $('forgot-step-2');
+
+        forgotForm.onsubmit = e => {
+            e.preventDefault();
+            const email = $('forgot-email').value.trim().toLowerCase();
+            const users = readUsers();
+
+            if (step2.style.display === 'none') {
+                if (!users[email]) { alert('Email not found'); return; }
+                step2.style.display = 'block';
+                return;
+            }
+
+            const npw = $('forgot-new-password').value;
+            const cpw = $('forgot-new-confirm').value;
+
+            if (npw !== cpw) { alert('Passwords do not match'); return; }
+
+            users[email].password = npw;
+            writeUsers(users);
+
+            alert('Password reset successful!');
+            overlay.style.display = 'none';
+            step2.style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>
