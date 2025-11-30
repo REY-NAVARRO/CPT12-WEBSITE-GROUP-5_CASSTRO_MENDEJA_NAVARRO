@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Feedback Form</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/assests/style.css">
   <link rel="icon" href="images/school-logo.png">
   <style>
     .profile-pic {
@@ -13,6 +14,7 @@
       border-radius: 50%;
       border: 2px solid gold;
     }
+
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: #111;
@@ -129,13 +131,13 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
-      padding-bottom: 20px; /* Add this line or increase as needed */
+      padding-bottom: 20px;
     }
-
   </style>
 </head>
+
 <body>
-    <header>
+  <header>
     <img src="images/school-logo.png" alt="School Logo" class="profile-pic" />
     <nav class="header-nav">
       <a href="index.html#home">Home</a>
@@ -177,4 +179,26 @@
     </div>
   </section>
 </body>
+<script>
+  const feedbackForm = document.getElementById('feedbackForm');
+
+  feedbackForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = feedbackForm.name.value;
+    const email = feedbackForm.email.value;
+    const phone = feedbackForm.phone.value;
+    const rating = feedbackForm.rating.value;
+    const message = feedbackForm.message.value;
+
+    const res = await fetch('api/feedback.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, rating, message })
+    });
+    const data = await res.json();
+    if (data.success) alert('Feedback submitted!');
+    else alert(data.error);
+  });
+</script>
+
 </html>

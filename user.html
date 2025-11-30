@@ -237,6 +237,7 @@
         }
 
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0);
@@ -411,14 +412,7 @@
             return s;
         }
 
-        function readUsers() {
-            return JSON.parse(localStorage.getItem('users') || '{}');
-        }
-        function writeUsers(users) {
-            localStorage.setItem('users', JSON.stringify(users));
-        }
-
-        registerForm.onsubmit = e => {
+        registerForm.onsubmit = async e => {
             e.preventDefault();
             const name = $('reg-name').value.trim();
             const email = $('reg-email').value.trim().toLowerCase();
@@ -429,33 +423,53 @@
             if (!role) { alert('Please select a role'); return; }
             if (pw !== pwc) { alert('Passwords do not match'); return; }
 
-            const users = readUsers();
-            if (users[email]) { alert('Email already exists'); return; }
-
-            users[email] = { name, email, password: pw, role };
-            writeUsers(users);
-
-            alert('Account created successfully!');
-            showForm('login');
+            try {
+                const res = await fetch('api/register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password: pw, role })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Account created successfully!');
+                    showForm('login');
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Server error. Please try again.');
+                console.error(err);
+            }
         }
 
-        loginForm.onsubmit = e => {
+        loginForm.onsubmit = async e => {
             e.preventDefault();
             const email = $('login-email').value.trim().toLowerCase();
             const pw = $('login-password').value;
-            const users = readUsers();
 
-            if (!users[email]) { alert('Account not found'); return; }
-            if (users[email].password !== pw) { alert('Wrong password'); return; }
+            try {
+                const res = await fetch('api/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: pw })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    sessionStorage.setItem('loggedIn', 'true');
+                    sessionStorage.setItem('userEmail', email);
+                    sessionStorage.setItem('userName', data.name);
+                    sessionStorage.setItem('role', data.role);
 
-            localStorage.setItem('loggedIn', 'true');
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userName', users[email].name);
-            localStorage.setItem('role', users[email].role);
-
-            alert('Login successful!');
-            window.location.href = 'index.html';
-        };
+                    alert('Login successful!');
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Server error. Please try again.');
+                console.error(err);
+            }
+        }
 
         const overlay = $('overlay');
         $('forgot-btn').onclick = () => overlay.style.display = 'flex';
@@ -467,14 +481,27 @@
         const forgotForm = $('forgot-form');
         const step2 = $('forgot-step-2');
 
-        forgotForm.onsubmit = e => {
+        forgotForm.onsubmit = async e => {
             e.preventDefault();
             const email = $('forgot-email').value.trim().toLowerCase();
-            const users = readUsers();
 
             if (step2.style.display === 'none') {
-                if (!users[email]) { alert('Email not found'); return; }
-                step2.style.display = 'block';
+                try {
+                    const res = await fetch('api/forgot.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, step: 1 })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        step2.style.display = 'block';
+                    } else {
+                        alert(data.error);
+                    }
+                } catch (err) {
+                    alert('Server error. Please try again.');
+                    console.error(err);
+                }
                 return;
             }
 
@@ -483,14 +510,27 @@
 
             if (npw !== cpw) { alert('Passwords do not match'); return; }
 
-            users[email].password = npw;
-            writeUsers(users);
-
-            alert('Password reset successful!');
-            overlay.style.display = 'none';
-            step2.style.display = 'none';
+            try {
+                const res = await fetch('api/forgot.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: npw, step: 2 })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Password reset successful!');
+                    overlay.style.display = 'none';
+                    step2.style.display = 'none';
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Server error. Please try again.');
+                console.error(err);
+            }
         }
     </script>
+
 </body>
 
 </html>

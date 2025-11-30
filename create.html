@@ -67,19 +67,31 @@
       const registerBtn = document.getElementById('registerBtn');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      const userEmail = localStorage.getItem('userEmail');
-      const userRole = localStorage.getItem('role');
+      const userEmail = sessionStorage.getItem('userEmail');
+      const userRole = sessionStorage.getItem('role');
 
       if (userRole !== 'teacher') form.style.display = 'none';
 
-      let sections = JSON.parse(localStorage.getItem('sections')) || [];
+      async function loadSections() {
+        try {
+          const res = await fetch('api/sections.php');
+          const data = await res.json();
+          sectionGrid.innerHTML = '';
 
-      sections.forEach(sec => {
-        if (userRole === 'teacher' && sec.owner !== userEmail) return;
-        createCard(sec.id, sec.section, sec.subject, sec.owner);
-      });
+          data.forEach(sec => {
+            if (userRole === 'teacher' && sec.owner_email !== userEmail) return;
 
-      form.addEventListener('submit', e => {
+            createCard(sec.id, sec.section_name, sec.subject, sec.owner_email);
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+
+      loadSections();
+
+      form.addEventListener('submit', async e => {
         e.preventDefault();
         if (userRole !== 'teacher') return alert("Only teachers can create sections.");
         if (!userEmail) return alert("You must be logged in to create a section.");
@@ -88,26 +100,32 @@
         const subject = document.getElementById('subject').value.trim();
         if (!section || !subject) return;
 
-        const exists = sections.some(s => s.section === section && s.subject === subject && s.owner === userEmail);
-        if (exists) return alert("You already created this section.");
+        try {
+          const res = await fetch('api/sections.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ section, subject })
+          });
 
-        const newSection = { id: Date.now(), section, subject, owner: userEmail };
-        sections.push(newSection);
-        localStorage.setItem('sections', JSON.stringify(sections));
-        createCard(newSection.id, section, subject, userEmail);
-        form.reset();
+          const result = await res.json();
+          if (result.error) return alert(result.error);
+
+          createCard(result.id, section, subject, userEmail);
+          form.reset();
+        } catch (err) {
+          console.error(err);
+        }
       });
 
       function createCard(id, section, subject, owner) {
         const card = document.createElement('div');
         card.className = 'section-card';
         card.innerHTML = `
-          <h3>${section}</h3>
-          <p>${subject}</p>
-          <button class="open-btn">Open Attendance</button>
-          ${userRole === 'teacher' ? '<button class="delete-btn">❌ Delete</button>' : ''}
-        `;
-
+      <h3>${section}</h3>
+      <p>${subject}</p>
+      <button class="open-btn">Open Attendance</button>
+      ${userRole === 'teacher' ? '<button class="delete-btn">❌ Delete</button>' : ''}
+    `;
         sectionGrid.appendChild(card);
 
         card.querySelector('.open-btn').addEventListener('click', () => {
@@ -116,16 +134,24 @@
 
         const delBtn = card.querySelector('.delete-btn');
         if (delBtn) {
-          delBtn.addEventListener('click', () => {
+          delBtn.addEventListener('click', async () => {
             if (!confirm(`Delete section "${section}"?`)) return;
-            sections = sections.filter(s => !(s.id === id && s.owner === userEmail));
-            localStorage.setItem('sections', JSON.stringify(sections));
-            card.remove();
+            try {
+              const res = await fetch('api/sections.php', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+              });
+              const result = await res.json();
+              if (result.success) card.remove();
+              else alert(result.error || 'Failed to delete section');
+            } catch (err) {
+              console.error(err);
+            }
           });
         }
       }
 
-      // SEARCH
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
         document.querySelectorAll(".section-card").forEach(card => {
@@ -142,16 +168,14 @@
 
       loginBtn.onclick = () => window.location.href = 'user.html';
       registerBtn.onclick = () => window.location.href = 'user.html';
-      logoutBtn.onclick = () => {
-        localStorage.removeItem('loggedIn');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('role');
+      logoutBtn.onclick = async () => {
+        try { await fetch('api/logout.php', { method: 'POST' }); } catch (e) { }
+        sessionStorage.clear();
         window.location.reload();
       };
 
       function updateLoginStatus() {
-        const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+        const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
         loginBtn.style.display = isLoggedIn ? 'none' : 'block';
         registerBtn.style.display = isLoggedIn ? 'none' : 'block';
         logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
@@ -159,5 +183,6 @@
       updateLoginStatus();
     });
   </script>
+
 </body>
 </html>

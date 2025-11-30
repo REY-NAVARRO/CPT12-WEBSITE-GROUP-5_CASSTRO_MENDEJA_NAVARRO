@@ -197,18 +197,34 @@
       const closeBtn = document.querySelector(".close");
 
       function updateLoginStatus() {
-        const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+        const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
+        const userName = sessionStorage.getItem('userName');
+
         loginBtn.style.display = isLoggedIn ? 'none' : 'block';
         registerBtn.style.display = isLoggedIn ? 'none' : 'block';
         logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
+
+        if (isLoggedIn && userName) {
+          authPopup.querySelector('.username')?.remove();
+          const span = document.createElement('span');
+          span.classList.add('username');
+          span.textContent = `Hello, ${userName}`;
+          authPopup.prepend(span);
+        }
       }
       updateLoginStatus();
 
       loginBtn.onclick = () => window.location.href = 'user.html';
       registerBtn.onclick = () => window.location.href = 'user.html';
-      logoutBtn.onclick = () => {
-        localStorage.removeItem('loggedIn');
-        localStorage.removeItem('userEmail');
+
+      logoutBtn.onclick = async () => {
+        try {
+          await fetch('api/logout.php', { method: 'POST' });
+        } catch (err) {
+          console.error(err);
+        }
+
+        sessionStorage.clear();
         updateLoginStatus();
         window.location.reload();
       };
@@ -222,7 +238,7 @@
       logo.onclick = () => {
         modal.style.display = 'block';
         modalImg.src = logo.src;
-      }
+      };
       closeBtn.onclick = () => modal.style.display = 'none';
       window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; }
 
@@ -248,6 +264,7 @@
       });
     });
   </script>
+
 </body>
 
 </html>
