@@ -1,0 +1,90 @@
+<?php
+session_start();
+require_once 'db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'You must be logged in']);
+    exit;
+}
+
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'GET') {
+    $sectionName = $_GET['section'] ?? '';
+    if (!$sectionName) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing section']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT st.*, s.section_name
+        FROM students st
+        JOIN sections s ON st.section_id = s.id
+        WHERE s.section_name = ?
+    ");
+    $stmt->execute([$sectionName]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+} elseif ($method === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $sectionName = $data['section'] ?? '';
+    $name = trim($data['name'] ?? '');
+
+    if (!$sectionName || !$name) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing fields']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("SELECT id FROM sections WHERE section_name = ?");
+    $stmt->execute([$sectionName]);
+    $section = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$section) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Section not found']);
+        exit;
+    }
+
+    $sectionId = $section['id'];
+
+    $stmt = $pdo->prepare("INSERT INTO students (section_id, name) VALUES (?, ?)");
+    $stmt->execute([$sectionId, $name]);
+
+    $id = $pdo->lastInsertId();
+    echo json_encode([
+        'id' => $id,
+        'name' => $name,
+        'status' => null,
+        'added_at' => date('Y-m-d H:i:s'),
+        'image' => null
+    ]);
+} elseif ($method === 'PUT') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $studentId = $data['student_id'] ?? '';
+    $status = $data['status'] ?? '';
+    if (!$studentId || !$status) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing fields']);
+        exit;
+    }
+    $stmt = $pdo->prepare("UPDATE students SET status = ? WHERE id = ?");
+    if ($stmt->execute([$status, $studentId]))
+        echo json_encode(['success' => true]);
+    else
+        echo json_encode(['error' => 'Failed to update status']);
+} elseif ($method === 'DELETE') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $studentId = $data['student_id'] ?? '';
+    if (!$studentId) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing student_id']);
+        exit;
+    }
+    $stmt = $pdo->prepare("DELETE FROM students WHERE id = ?");
+    if ($stmt->execute([$studentId]))
+        echo json_encode(['success' => true]);
+    else
+        echo json_encode(['error' => 'Failed to delete student']);
+}
