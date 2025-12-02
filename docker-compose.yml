@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: php-backend
+    ports:
+      - "8080:8080"  # matches Render port
+    environment:
+      DB_HOST: db
+      DB_NAME: myapp
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_PORT: 3306
+      MYSQL_CA_CERT: ${MYSQL_CA_CERT}  # optional if using SSL locally
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    command:
+      --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+      # Optional: for SSL you can mount certs
+      # - ./certs:/certs
+    restart: unless-stopped
+
+volumes:
+  db_data:
