@@ -326,9 +326,6 @@
                         <label>Subject
                             <input type="text" id="reg-subject" placeholder="Enter subject">
                         </label>
-                        <label>Section
-                            <input type="text" id="reg-section" placeholder="Enter section">
-                        </label>
                     </div>
 
                     <button class="btn primary">Create account</button>
@@ -429,14 +426,13 @@
             const pwc = $('reg-password-confirm').value;
             const role = $('reg-role').value;
             const subject = role === 'teacher' ? $('reg-subject').value.trim() : null;
-            const section = role === 'teacher' ? $('reg-section').value.trim() : null;
 
             if (!role) { alert('Please select a role'); return; }
             if (!name || !email) { alert('Please fill in all fields'); return; }
             if (pw.length < 8) { alert('Password must be at least 8 characters'); return; }
             if (pw !== pwc) { alert('Passwords do not match'); return; }
-            if (role === 'teacher' && (!subject || !section)) {
-                alert('Please fill in all required fields for teachers');
+            if (role === 'teacher' && !subject) {
+                alert('Please enter a subject');
                 return;
             }
 
@@ -444,7 +440,6 @@
                 const payload = { name, email, password: pw, role };
                 if (role === 'teacher') {
                     payload.subject = subject;
-                    payload.section = section;
                 }
                 const res = await fetch('register.php', {
                     method: 'POST',

@@ -11,7 +11,6 @@ $email = filter_var($data['email'] ?? '', FILTER_VALIDATE_EMAIL);
 $password = $data['password'] ?? '';
 $role = $data['role'] ?? 'student';
 $subject = htmlspecialchars($data['subject'] ?? '', ENT_QUOTES, 'UTF-8');
-$section = htmlspecialchars($data['section'] ?? '', ENT_QUOTES, 'UTF-8');
 
 $allowed_roles = ['student', 'teacher', 'admin'];
 if (!in_array($role, $allowed_roles)) {
@@ -20,7 +19,7 @@ if (!in_array($role, $allowed_roles)) {
     exit;
 }
 
-if (!$name || !$email || !$password || ($role === 'teacher' && (!$subject || !$section))) {
+if (!$name || !$email || !$password || ($role === 'teacher' && !$subject)) {
     error_log("Validation Failed: Missing fields");
     http_response_code(400);
     echo json_encode(['error' => 'Missing fields']);
@@ -46,8 +45,8 @@ try {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     if ($role === 'teacher') {
-        $stmt = $pdo->prepare("INSERT INTO teachers (name, email, password_hash, subject, section, role) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $email, $hash, $subject, $section, $role]);
+        $stmt = $pdo->prepare("INSERT INTO teachers (name, email, password_hash, subject, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $email, $hash, $subject, $role]);
     } else {
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)");
         $stmt->execute([$name, $email, $hash, $role]);
