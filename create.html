@@ -58,6 +58,19 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const header = document.querySelector('header');
+      let lastScroll = 0;
+
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > lastScroll && currentScroll > 100) {
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+        lastScroll = currentScroll;
+      });
+
       const form = document.getElementById('attendance-form');
       const sectionGrid = document.getElementById('section-grid');
       const searchInput = document.getElementById("search");
