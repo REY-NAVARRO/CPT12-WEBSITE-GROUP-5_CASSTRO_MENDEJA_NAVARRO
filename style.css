@@ -235,15 +235,29 @@ html {
   header {
     flex-direction: column;
     padding: 10px;
+    align-items: stretch;
+  }
+
+  header img.profile-pic {
+    align-self: center;
+    margin-bottom: 10px;
   }
 
   .header-nav {
-    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .header-nav a {
     font-size: 14px;
-    margin-left: 10px;
+    margin: 0;
+  }
+
+  .user-icon-container {
+    margin: 0;
   }
 
   .content-container {
