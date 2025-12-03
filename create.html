@@ -104,7 +104,7 @@
 
       async function loadSections() {
         try {
-          const res = await fetch('api/sections.php');
+          const res = await fetch('api/sections.php', { credentials: 'include' });
           const data = await res.json();
           sectionGrid.innerHTML = '';
 
@@ -128,13 +128,14 @@
 
         const section = document.getElementById('section').value.trim();
         const subject = document.getElementById('subject').value.trim();
-        if (!section || !subject) return;
+        if (!section || !subject) return alert('Please fill in both section and subject');
 
         try {
           const res = await fetch('api/sections.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ section, subject })
+            body: JSON.stringify({ section, subject }),
+            credentials: 'include'
           });
 
           const result = await res.json();
@@ -142,8 +143,10 @@
 
           createCard(result.id, section, subject, userEmail);
           form.reset();
+          alert('Section created successfully!');
         } catch (err) {
           console.error(err);
+          alert('Error creating section. Please try again.');
         }
       });
 
@@ -170,7 +173,8 @@
               const res = await fetch('api/sections.php', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
+                body: JSON.stringify({ id }),
+                credentials: 'include'
               });
               const result = await res.json();
               if (result.success) card.remove();

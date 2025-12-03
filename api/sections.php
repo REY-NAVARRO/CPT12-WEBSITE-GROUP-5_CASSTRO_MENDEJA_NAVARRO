@@ -12,19 +12,20 @@ if ($method === 'POST') {
     $subject = trim($data['subject'] ?? '');
     $userEmail = $_SESSION['email'] ?? '';
 
-    if (!$section || !$subject || !$userEmail) {
+    if (!$section || !$subject) {
         http_response_code(400);
-        echo json_encode(['error' => 'Missing fields']);
+        echo json_encode(['error' => 'Missing section or subject']);
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO sections (section_name, subject, owner_user_id) 
-                           VALUES (:section, :subject, (SELECT id FROM users WHERE email=:email))");
-    $stmt->execute([
-        'section' => $section,
-        'subject' => $subject,
-        'email' => $userEmail
-    ]);
+    if (!$userEmail) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Not logged in']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO sections (section_name, subject, owner_email) VALUES (?, ?, ?)");
+    $stmt->execute([$section, $subject, $userEmail]);
 
     $id = $pdo->lastInsertId();
 
@@ -48,11 +49,7 @@ if ($method === 'DELETE') {
         exit;
     }
 
-    $stmt = $pdo->prepare("
-        DELETE s FROM sections s
-        JOIN users u ON s.owner_user_id = u.id
-        WHERE s.id = ? AND u.email = ?
-    ");
+    $stmt = $pdo->prepare("DELETE FROM sections WHERE id = ? AND owner_email = ?");
     $stmt->execute([$sectionId, $userEmail]);
 
     if ($stmt->rowCount()) {
@@ -64,10 +61,6 @@ if ($method === 'DELETE') {
     exit;
 }
 
-$stmt = $pdo->query("
-  SELECT s.id, s.section_name, s.subject, u.email AS owner_email
-  FROM sections s
-  JOIN users u ON s.owner_user_id = u.id
-");
+$stmt = $pdo->query("SELECT id, section_name, subject, owner_email FROM sections ORDER BY created_at DESC");
 $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($sections);
