@@ -187,52 +187,7 @@
       }
       updateLoginStatus();
 
-      const roleField = document.getElementById("role");
-      const teacherFields = document.getElementById("teacher-fields");
-      const registrationForm = document.getElementById("registration-form");
 
-      roleField.addEventListener("change", () => {
-        if (roleField.value === "teacher") {
-          teacherFields.style.display = "block";
-        } else {
-          teacherFields.style.display = "none";
-        }
-      });
-
-      registrationForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const role = roleField.value;
-        const name = document.getElementById("name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const subject = role === "teacher" ? document.getElementById("teacher-subject").value.trim() : null;
-        const section = role === "teacher" ? document.getElementById("teacher-section").value.trim() : null;
-
-        if (!role || !name || !email || !password || (role === "teacher" && (!subject || !section))) {
-          alert("Please fill in all required fields.");
-          return;
-        }
-
-        try {
-          const response = await fetch("api/register.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role, name, email, password, subject, section })
-          });
-
-          const result = await response.json();
-          if (result.success) {
-            alert("Registration successful!");
-            registrationForm.reset();
-          } else {
-            alert(result.error || "Registration failed.");
-          }
-        } catch (error) {
-          console.error("Error during registration:", error);
-          alert("An error occurred. Please try again.");
-        }
-      });
     });
   </script>
 
