@@ -70,7 +70,7 @@
 
       async function loadStudents() {
         try {
-          const res = await fetch(`api/students.php?section=${encodeURIComponent(sectionName)}`);
+          const res = await fetch(`api/students.php?section=${encodeURIComponent(sectionName)}`, { credentials: 'include' });
           const students = await res.json();
           attendanceTable.innerHTML = '';
           students.forEach(student => addStudentRow(student));
@@ -89,7 +89,8 @@
           const res = await fetch('api/students.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ section: sectionName, name })
+            body: JSON.stringify({ section: sectionName, name }),
+            credentials: 'include'
           });
           const newStudent = await res.json();
           if (newStudent.error) return alert(newStudent.error);
@@ -184,7 +185,8 @@
               const res = await fetch('api/students.php', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ student_id: id })
+                body: JSON.stringify({ student_id: id }),
+                credentials: 'include'
               });
               const result = await res.json();
               if (result.success) row.remove();
@@ -206,7 +208,8 @@
             const res = await fetch('api/students.php', {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ student_id: id, status: newStatus })
+              body: JSON.stringify({ student_id: id, status: newStatus }),
+              credentials: 'include'
             });
             const result = await res.json();
             if (result.success) statusCircle.style.background = newStatus === "Present" ? "green" : "red";

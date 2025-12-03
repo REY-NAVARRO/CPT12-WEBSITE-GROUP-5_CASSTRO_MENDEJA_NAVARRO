@@ -18,12 +18,7 @@ if ($method === 'GET') {
         exit;
     }
 
-    $stmt = $pdo->prepare("
-        SELECT st.*, s.section_name
-        FROM students st
-        JOIN sections s ON st.section_id = s.id
-        WHERE s.section_name = ?
-    ");
+    $stmt = $pdo->prepare("SELECT id, name, image, status, DATE_FORMAT(added_at, '%Y-%m-%d %H:%i:%s') as added_at FROM students WHERE section_name = ? ORDER BY added_at DESC");
     $stmt->execute([$sectionName]);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 } elseif ($method === 'POST') {
@@ -37,26 +32,14 @@ if ($method === 'GET') {
         exit;
     }
 
-    $stmt = $pdo->prepare("SELECT id FROM sections WHERE section_name = ?");
-    $stmt->execute([$sectionName]);
-    $section = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$section) {
-        http_response_code(404);
-        echo json_encode(['error' => 'Section not found']);
-        exit;
-    }
-
-    $sectionId = $section['id'];
-
-    $stmt = $pdo->prepare("INSERT INTO students (section_id, name) VALUES (?, ?)");
-    $stmt->execute([$sectionId, $name]);
+    $stmt = $pdo->prepare("INSERT INTO students (section_name, name) VALUES (?, ?)");
+    $stmt->execute([$sectionName, $name]);
 
     $id = $pdo->lastInsertId();
     echo json_encode([
         'id' => $id,
         'name' => $name,
-        'status' => null,
+        'status' => 'Pending',
         'added_at' => date('Y-m-d H:i:s'),
         'image' => null
     ]);
