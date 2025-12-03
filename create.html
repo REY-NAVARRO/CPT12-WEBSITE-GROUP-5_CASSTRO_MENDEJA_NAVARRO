@@ -56,7 +56,6 @@
     <p style="text-align: center; color: #FFD700;">&copy; Attendance Website</p>
   </footer>
 
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById('attendance-form');
@@ -81,14 +80,12 @@
 
           data.forEach(sec => {
             if (userRole === 'teacher' && sec.owner_email !== userEmail) return;
-
             createCard(sec.id, sec.section_name, sec.subject, sec.owner_email);
           });
         } catch (err) {
           console.error(err);
         }
       }
-
 
       loadSections();
 
@@ -125,11 +122,11 @@
         const card = document.createElement('div');
         card.className = 'section-card';
         card.innerHTML = `
-      <h3>${section}</h3>
-      <p>${subject}</p>
-      <button class="open-btn">Open Attendance</button>
-      ${userRole === 'teacher' ? '<button class="delete-btn">❌ Delete</button>' : ''}
-    `;
+          <h3>${section}</h3>
+          <p>${subject}</p>
+          <button class="open-btn">Open Attendance</button>
+          ${userRole === 'teacher' ? '<button class="delete-btn">❌ Delete</button>' : ''}
+        `;
         sectionGrid.appendChild(card);
 
         card.querySelector('.open-btn').addEventListener('click', () => {
@@ -174,7 +171,7 @@
       loginBtn.onclick = () => window.location.href = 'user.html';
       registerBtn.onclick = () => window.location.href = 'user.html';
       logoutBtn.onclick = async () => {
-        try { await fetch('api/logout.php', { method: 'POST' }); } catch (e) { }
+        try { await fetch('api/logout.php', { method: 'POST', credentials: 'include' }); } catch (e) { }
         sessionStorage.clear();
         window.location.reload();
       };
@@ -186,8 +183,6 @@
         logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
       }
       updateLoginStatus();
-
-
     });
   </script>
 
