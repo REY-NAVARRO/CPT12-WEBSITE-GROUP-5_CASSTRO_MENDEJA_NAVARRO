@@ -322,9 +322,12 @@
                         <input type="password" id="reg-password-confirm" required>
                     </label>
 
-                    <div id="subject-field" style="display: none;">
+                    <div id="teacher-fields" style="display: none;">
                         <label>Subject
                             <input type="text" id="reg-subject" placeholder="Enter subject">
+                        </label>
+                        <label>Section
+                            <input type="text" id="reg-section" placeholder="Enter section">
                         </label>
                     </div>
 
@@ -426,12 +429,13 @@
             const pwc = $('reg-password-confirm').value;
             const role = $('reg-role').value;
             const subject = role === 'teacher' ? $('reg-subject').value.trim() : null;
-            // If you have a section field, add it here:
-            // const section = role === 'teacher' ? $('reg-section').value.trim() : null;
+            const section = role === 'teacher' ? $('reg-section').value.trim() : null;
 
             if (!role) { alert('Please select a role'); return; }
+            if (!name || !email) { alert('Please fill in all fields'); return; }
+            if (pw.length < 8) { alert('Password must be at least 8 characters'); return; }
             if (pw !== pwc) { alert('Passwords do not match'); return; }
-            if (role === 'teacher' && (!subject /*|| !section*/)) {
+            if (role === 'teacher' && (!subject || !section)) {
                 alert('Please fill in all required fields for teachers');
                 return;
             }
@@ -440,8 +444,7 @@
                 const payload = { name, email, password: pw, role };
                 if (role === 'teacher') {
                     payload.subject = subject;
-                    // If you have a section field, add it here:
-                    // payload.section = section;
+                    payload.section = section;
                 }
                 const res = await fetch('api/register.php', {
                     method: 'POST',
@@ -550,13 +553,13 @@
         }
 
         const regRole = document.getElementById('reg-role');
-        const subjectField = document.getElementById('subject-field');
+        const teacherFields = document.getElementById('teacher-fields');
 
         regRole.addEventListener('change', () => {
             if (regRole.value === 'teacher') {
-                subjectField.style.display = 'block';
+                teacherFields.style.display = 'block';
             } else {
-                subjectField.style.display = 'none';
+                teacherFields.style.display = 'none';
             }
         });
     </script>

@@ -7,7 +7,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 error_log("Incoming Request Payload: " . json_encode($data)); // Debugging log
 
 $name = htmlspecialchars($data['name'] ?? '', ENT_QUOTES, 'UTF-8');
-$email = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
+$email = filter_var($data['email'] ?? '', FILTER_VALIDATE_EMAIL);
 $password = $data['password'] ?? '';
 $role = $data['role'] ?? 'student';
 $subject = htmlspecialchars($data['subject'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -21,9 +21,15 @@ if (!in_array($role, $allowed_roles)) {
 }
 
 if (!$name || !$email || !$password || ($role === 'teacher' && (!$subject || !$section))) {
-    error_log("Validation Failed: Missing fields"); // Debugging log
+    error_log("Validation Failed: Missing fields");
     http_response_code(400);
     echo json_encode(['error' => 'Missing fields']);
+    exit;
+}
+
+if (strlen($password) < 8) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Password must be at least 8 characters']);
     exit;
 }
 
@@ -33,7 +39,7 @@ try {
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
         http_response_code(409);
-        echo json_encode(['error' => 'Email already registered']);
+        echo json_encode(['error' => 'Registration failed']);
         exit;
     }
 
@@ -55,7 +61,7 @@ try {
     $_SESSION['role'] = $role;
     $_SESSION['name'] = $name;
 
-    echo json_encode(['success' => true, 'role' => $role, 'name' => $name]);
+    echo json_encode(['success' => true, 'role' => htmlspecialchars($role, ENT_QUOTES, 'UTF-8'), 'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')]);
 } catch (PDOException $e) {
     error_log("Registration error: " . $e->getMessage()); // Debugging log
     http_response_code(500);
