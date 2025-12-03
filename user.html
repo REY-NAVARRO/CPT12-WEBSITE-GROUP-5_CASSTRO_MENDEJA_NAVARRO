@@ -425,15 +425,28 @@
             const pw = $('reg-password').value;
             const pwc = $('reg-password-confirm').value;
             const role = $('reg-role').value;
+            const subject = role === 'teacher' ? $('reg-subject').value.trim() : null;
+            // If you have a section field, add it here:
+            // const section = role === 'teacher' ? $('reg-section').value.trim() : null;
 
             if (!role) { alert('Please select a role'); return; }
             if (pw !== pwc) { alert('Passwords do not match'); return; }
+            if (role === 'teacher' && (!subject /*|| !section*/)) {
+                alert('Please fill in all required fields for teachers');
+                return;
+            }
 
             try {
+                const payload = { name, email, password: pw, role };
+                if (role === 'teacher') {
+                    payload.subject = subject;
+                    // If you have a section field, add it here:
+                    // payload.section = section;
+                }
                 const res = await fetch('api/register.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password: pw, role })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 if (data.success) {

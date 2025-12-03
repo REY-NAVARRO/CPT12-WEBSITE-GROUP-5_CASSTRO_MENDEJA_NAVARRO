@@ -234,8 +234,6 @@
         const subject = role === "teacher" ? document.getElementById("teacher-subject").value.trim() : null;
         const section = role === "teacher" ? document.getElementById("teacher-section").value.trim() : null;
 
-        console.log("Request Payload:", { role, name, email, password, subject, section }); // Debugging log
-
         if (!role || !name || !email || !password || (role === "teacher" && (!subject || !section))) {
           alert("Please fill in all required fields.");
           return;
@@ -249,8 +247,6 @@
           });
 
           const result = await response.json();
-          console.log("Response:", result); // Debugging log
-
           if (result.success) {
             alert("Registration successful!");
             registrationForm.reset();
