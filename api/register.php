@@ -4,11 +4,14 @@ header('Content-Type: application/json');
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+error_log("Incoming Request Payload: " . json_encode($data)); // Debugging log
+
 $name = htmlspecialchars($data['name'] ?? '', ENT_QUOTES, 'UTF-8');
 $email = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
 $password = $data['password'] ?? '';
 $role = $data['role'] ?? 'student';
 $subject = htmlspecialchars($data['subject'] ?? '', ENT_QUOTES, 'UTF-8');
+$section = htmlspecialchars($data['section'] ?? '', ENT_QUOTES, 'UTF-8');
 
 $allowed_roles = ['student', 'teacher', 'admin'];
 if (!in_array($role, $allowed_roles)) {
@@ -17,7 +20,8 @@ if (!in_array($role, $allowed_roles)) {
     exit;
 }
 
-if (!$name || !$email || !$password || ($role === 'teacher' && !$subject)) {
+if (!$name || !$email || !$password || ($role === 'teacher' && (!$subject || !$section))) {
+    error_log("Validation Failed: Missing fields"); // Debugging log
     http_response_code(400);
     echo json_encode(['error' => 'Missing fields']);
     exit;
@@ -36,8 +40,8 @@ try {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     if ($role === 'teacher') {
-        $stmt = $pdo->prepare("INSERT INTO teachers (name, email, password_hash, subject, role) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $email, $hash, $subject, $role]);
+        $stmt = $pdo->prepare("INSERT INTO teachers (name, email, password_hash, subject, section, role) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $email, $hash, $subject, $section, $role]);
     } else {
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)");
         $stmt->execute([$name, $email, $hash, $role]);
@@ -53,7 +57,7 @@ try {
 
     echo json_encode(['success' => true, 'role' => $role, 'name' => $name]);
 } catch (PDOException $e) {
-    error_log("Registration error: " . $e->getMessage()); // Log the error
+    error_log("Registration error: " . $e->getMessage()); // Debugging log
     http_response_code(500);
     echo json_encode(['error' => 'User registration failed']);
 }

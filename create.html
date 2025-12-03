@@ -74,9 +74,12 @@
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
 
-      <div id="teacher-subject-field" style="display: none;">
+      <div id="teacher-fields" style="display: none;">
         <label for="teacher-subject">Subject:</label>
         <input type="text" id="teacher-subject" name="teacher-subject" placeholder="Enter subject">
+
+        <label for="teacher-section">Section:</label>
+        <input type="text" id="teacher-section" name="teacher-section" placeholder="Enter section">
       </div>
 
       <button type="submit">Register</button>
@@ -210,14 +213,14 @@
       updateLoginStatus();
 
       const roleField = document.getElementById("role");
-      const teacherSubjectField = document.getElementById("teacher-subject-field");
+      const teacherFields = document.getElementById("teacher-fields");
       const registrationForm = document.getElementById("registration-form");
 
       roleField.addEventListener("change", () => {
         if (roleField.value === "teacher") {
-          teacherSubjectField.style.display = "block";
+          teacherFields.style.display = "block";
         } else {
-          teacherSubjectField.style.display = "none";
+          teacherFields.style.display = "none";
         }
       });
 
@@ -229,8 +232,11 @@
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
         const subject = role === "teacher" ? document.getElementById("teacher-subject").value.trim() : null;
+        const section = role === "teacher" ? document.getElementById("teacher-section").value.trim() : null;
 
-        if (!role || !name || !email || !password || (role === "teacher" && !subject)) {
+        console.log("Request Payload:", { role, name, email, password, subject, section }); // Debugging log
+
+        if (!role || !name || !email || !password || (role === "teacher" && (!subject || !section))) {
           alert("Please fill in all required fields.");
           return;
         }
@@ -239,10 +245,12 @@
           const response = await fetch("api/register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role, name, email, password, subject })
+            body: JSON.stringify({ role, name, email, password, subject, section })
           });
 
           const result = await response.json();
+          console.log("Response:", result); // Debugging log
+
           if (result.success) {
             alert("Registration successful!");
             registrationForm.reset();
