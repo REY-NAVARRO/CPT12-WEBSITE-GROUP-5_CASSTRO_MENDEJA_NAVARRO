@@ -247,6 +247,56 @@
                 transform: translateY(-8px);
             }
         }
+
+        @media (max-width: 768px) {
+            .wrap {
+                padding: 10px;
+            }
+
+            .card {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+
+            .hero {
+                padding: 20px 15px;
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .form-col {
+                padding: 20px 15px;
+                border-left: none;
+                border-top: none;
+            }
+
+            .tabs {
+                gap: 10px;
+                font-size: 14px;
+            }
+
+            .row-space {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            input,
+            select {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 

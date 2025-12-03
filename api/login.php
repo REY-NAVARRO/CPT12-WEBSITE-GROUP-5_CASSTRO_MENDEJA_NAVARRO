@@ -37,7 +37,7 @@ try {
         echo json_encode(['success' => true, 'role' => $user['role'], 'name' => $user['name']]);
     } else {
         http_response_code(401);
-        echo json_encode(['error' => 'Invalid credentials']);
+        echo json_encode(['error' => 'Wrong Password or Email']);
     }
 } catch (PDOException $e) {
     http_response_code(500);
