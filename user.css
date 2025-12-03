@@ -232,27 +232,33 @@ input:focus {
 }
 
 @media (max-width: 768px) {
+  .wrap {
+    padding: 10px;
+  }
+
   .card {
     grid-template-columns: 1fr;
     max-width: 100%;
   }
 
   .hero {
-    padding: 30px 20px;
+    padding: 20px 15px;
+    display: none;
   }
 
   .hero h1 {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .form-col {
-    padding: 20px;
+    padding: 20px 15px;
     border-left: none;
-    border-top: 2px solid rgba(255, 215, 0, 0.25);
+    border-top: none;
   }
 
   .tabs {
-    gap: 15px;
+    gap: 10px;
+    font-size: 14px;
   }
 
   .row-space {
@@ -262,5 +268,14 @@ input:focus {
 
   .btn {
     width: 100%;
+  }
+
+  label {
+    font-size: 13px;
+  }
+
+  input, select {
+    font-size: 14px;
+    padding: 10px;
   }
 }
