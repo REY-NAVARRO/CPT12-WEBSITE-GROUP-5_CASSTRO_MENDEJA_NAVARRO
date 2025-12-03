@@ -78,7 +78,7 @@ body {
       align-items: center;
       justify-content: center;
       gap: 8px;
-      min-width: 50px;
+      min-width: 0px;
       padding: 10px;
     }
 
