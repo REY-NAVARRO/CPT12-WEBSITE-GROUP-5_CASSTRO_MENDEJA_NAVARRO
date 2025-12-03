@@ -56,6 +56,25 @@
     <p style="text-align: center; color: #FFD700;">&copy; Attendance Website</p>
   </footer>
 
+  <div id="registration-modal">
+    <form id="registration-form">
+      <!-- ...existing fields... -->
+      <label for="role">Role:</label>
+      <select id="role" name="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <div id="subject-field" style="display: none;">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" placeholder="Enter subject">
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById('attendance-form');
@@ -181,6 +200,15 @@
         logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
       }
       updateLoginStatus();
+
+      document.getElementById('role').addEventListener('change', function () {
+        const subjectField = document.getElementById('subject-field');
+        if (this.value === 'teacher') {
+          subjectField.style.display = 'block';
+        } else {
+          subjectField.style.display = 'none';
+        }
+      });
     });
   </script>
 
