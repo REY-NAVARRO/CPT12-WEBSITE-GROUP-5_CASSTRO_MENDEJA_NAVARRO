@@ -215,6 +215,18 @@ body {
     .user-icon-container {
       position: relative;
       cursor: pointer;
+      z-index: 10000;
+    }
+
+    .auth-popup {
+      z-index: 10000 !important;
+      pointer-events: auto;
+    }
+
+    .auth-popup button {
+      pointer-events: auto;
+      position: relative;
+      z-index: 10001;
     }
 
     @media (max-width: 768px) {

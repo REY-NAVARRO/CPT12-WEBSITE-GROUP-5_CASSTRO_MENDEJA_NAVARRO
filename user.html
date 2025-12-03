@@ -423,6 +423,12 @@
         tabRegister.onclick = () => showForm('register');
         toLoginBtn.onclick = () => showForm('login');
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        if (mode === 'register') {
+            showForm('register');
+        }
+
         function showForm(which) {
             if (which === 'login') {
                 tabLogin.classList.add('active');

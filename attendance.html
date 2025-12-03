@@ -18,14 +18,6 @@
       <a href="index.html#about">About</a>
       <a href="index.html#services">Services</a>
       <a href="index.html#contact">Contact</a>
-      <div class="user-icon-container">
-        <img src="images/1.png" alt="User Icon" id="userIcon" style="width: 45px; height: 45px; border-radius: 50%; cursor: pointer;">
-        <div id="authPopup" class="auth-popup" style="position: absolute; top: 55px; right: 0; background: #101827; padding: 10px; border-radius: 10px; display: none; flex-direction: column; gap: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); z-index: 1000;">
-          <button id="loginBtn" style="padding: 8px 12px; border: none; border-radius: 6px; background: #6ee7b7; color: black; font-weight: bold; cursor: pointer;">Login</button>
-          <button id="registerBtn" style="padding: 8px 12px; border: none; border-radius: 6px; background: #6ee7b7; color: black; font-weight: bold; cursor: pointer;">Create Account</button>
-          <button id="logoutBtn" style="display: none; padding: 8px 12px; border: none; border-radius: 6px; background: #6ee7b7; color: black; font-weight: bold; cursor: pointer;">Logout</button>
-        </div>
-      </div>
     </nav>
   </header>
 
@@ -52,46 +44,13 @@
     </div>
   </main>
 
-  <div id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9);" onclick="this.style.display='none'">
+  <div id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:50%; height:50%; background:rgba(0,0,0,0.9);" onclick="this.style.display='none'">
     <span style="position:absolute; top:20px; right:40px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">&times;</span>
     <img id="modalImage" style="margin:auto; display:block; max-width:90%; max-height:90%; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);" onclick="event.stopPropagation()">
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const userIcon = document.getElementById('userIcon');
-      const authPopup = document.getElementById('authPopup');
-      const loginBtn = document.getElementById('loginBtn');
-      const registerBtn = document.getElementById('registerBtn');
-      const logoutBtn = document.getElementById('logoutBtn');
-
-      userIcon.addEventListener('click', e => {
-        e.stopPropagation();
-        authPopup.style.display = authPopup.style.display === 'flex' ? 'none' : 'flex';
-      });
-
-      authPopup.addEventListener('click', e => {
-        e.stopPropagation();
-      });
-
-      window.addEventListener('click', () => authPopup.style.display = 'none');
-
-      loginBtn.onclick = () => window.location.href = 'user.html';
-      registerBtn.onclick = () => window.location.href = 'user.html';
-      logoutBtn.onclick = async () => {
-        try { await fetch('api/logout.php', { method: 'POST', credentials: 'include' }); } catch (e) { }
-        sessionStorage.clear();
-        window.location.href = 'index.html';
-      };
-
-      function updateLoginStatus() {
-        const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
-        loginBtn.style.display = isLoggedIn ? 'none' : 'block';
-        registerBtn.style.display = isLoggedIn ? 'none' : 'block';
-        logoutBtn.style.display = isLoggedIn ? 'block' : 'none';
-      }
-      updateLoginStatus();
-
       const addBtn = document.getElementById("addBtn");
       const studentNameInput = document.getElementById("studentName");
       const attendanceTable = document.querySelector("#attendanceTable tbody");
