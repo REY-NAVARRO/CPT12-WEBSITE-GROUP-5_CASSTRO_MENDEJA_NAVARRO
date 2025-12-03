@@ -322,6 +322,12 @@
                         <input type="password" id="reg-password-confirm" required>
                     </label>
 
+                    <div id="subject-field" style="display: none;">
+                        <label>Subject
+                            <input type="text" id="reg-subject" placeholder="Enter subject">
+                        </label>
+                    </div>
+
                     <button class="btn primary">Create account</button>
                     <button type="button" id="to-login" class="btn ghost">Back to login</button>
                 </form>
@@ -529,6 +535,17 @@
                 console.error(err);
             }
         }
+
+        const regRole = document.getElementById('reg-role');
+        const subjectField = document.getElementById('subject-field');
+
+        regRole.addEventListener('change', () => {
+            if (regRole.value === 'teacher') {
+                subjectField.style.display = 'block';
+            } else {
+                subjectField.style.display = 'none';
+            }
+        });
     </script>
 
 </body>
