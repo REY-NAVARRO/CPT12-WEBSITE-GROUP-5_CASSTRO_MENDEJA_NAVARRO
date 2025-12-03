@@ -56,35 +56,6 @@
     <p style="text-align: center; color: #FFD700;">&copy; Attendance Website</p>
   </footer>
 
-  <div id="registration-modal">
-    <form id="registration-form">
-      <label for="role">Role:</label>
-      <select id="role" name="role">
-        <option value="student">Student</option>
-        <option value="teacher">Teacher</option>
-        <option value="admin">Admin</option>
-      </select>
-
-      <label for="name">Full Name:</label>
-      <input type="text" id="name" name="name" required>
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-
-      <div id="teacher-fields" style="display: none;">
-        <label for="teacher-subject">Subject:</label>
-        <input type="text" id="teacher-subject" name="teacher-subject" placeholder="Enter subject">
-
-        <label for="teacher-section">Section:</label>
-        <input type="text" id="teacher-section" name="teacher-section" placeholder="Enter section">
-      </div>
-
-      <button type="submit">Register</button>
-    </form>
-  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {

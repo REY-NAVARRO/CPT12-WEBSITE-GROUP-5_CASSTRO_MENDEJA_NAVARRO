@@ -15,12 +15,11 @@ if (!$email || !$password) {
 }
 
 try {
-    // Fetch user by email from users table
+    // Fetch user by email 
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    // If not found in users, check teachers table
     if (!$user) {
         $stmt = $pdo->prepare("SELECT * FROM teachers WHERE email = ?");
         $stmt->execute([$email]);

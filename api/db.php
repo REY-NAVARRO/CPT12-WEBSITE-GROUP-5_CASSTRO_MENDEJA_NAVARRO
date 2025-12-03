@@ -14,10 +14,8 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ];
 
-// SSL configuration if CA cert exists
 if ($ssl_ca) {
     $options[PDO::MYSQL_ATTR_SSL_CA] = "/tmp/ca.pem";
-    // Write the base64 cert to file
     file_put_contents("/tmp/ca.pem", base64_decode($ssl_ca));
 }
 
