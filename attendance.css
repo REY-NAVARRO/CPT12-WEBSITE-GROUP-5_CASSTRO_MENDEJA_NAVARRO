@@ -150,8 +150,8 @@ body {
     }
 
     .upload-img {
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       object-fit: cover;
       border-radius: 50%;
       border: 2px solid gold;

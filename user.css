@@ -230,3 +230,37 @@ input:focus {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
+
+@media (max-width: 768px) {
+  .card {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .hero {
+    padding: 30px 20px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .form-col {
+    padding: 20px;
+    border-left: none;
+    border-top: 2px solid rgba(255, 215, 0, 0.25);
+  }
+
+  .tabs {
+    gap: 15px;
+  }
+
+  .row-space {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

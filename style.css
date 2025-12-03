@@ -230,3 +230,37 @@ html {
 #contact .main-content {
   text-align: left;
 }
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .header-nav {
+    margin-top: 10px;
+  }
+
+  .header-nav a {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  .content-container {
+    padding: 10px;
+    margin: 20px auto;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .create-link {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
