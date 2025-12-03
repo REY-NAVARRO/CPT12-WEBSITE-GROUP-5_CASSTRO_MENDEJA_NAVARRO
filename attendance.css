@@ -78,7 +78,8 @@ body {
       align-items: center;
       justify-content: center;
       gap: 8px;
-      width: 250px;
+      width: 100px;
+      padding: 5px;
     }
 
     .status-circle {
