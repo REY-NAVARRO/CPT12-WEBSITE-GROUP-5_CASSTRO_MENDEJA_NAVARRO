@@ -151,13 +151,13 @@ body {
     }
 
     .upload-img {
-      width: 25px;
-      height: 25px;
+      width: 40px;
+      height: 40px;
       object-fit: cover;
       border-radius: 50%;
       border: 2px solid gold;
       display: none;
-      margin: auto;
+      margin: 0;
     }
 
     .present {
@@ -189,6 +189,7 @@ body {
     td {
       padding: 12px;
       border-bottom: 1px solid gold;
+      vertical-align: middle;
     }
 
     th {
@@ -209,7 +210,41 @@ body {
       margin-left: 10px;
     }
 
+    .user-icon-container {
+      position: relative;
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 10px;
+        align-items: stretch;
+      }
+
+      header .profile-pic {
+        align-self: center;
+        margin-bottom: 10px;
+      }
+
+      .header-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin: 0;
+      }
+
+      .header-nav a {
+        font-size: 14px;
+        margin: 0;
+      }
+
+      .user-icon-container {
+        margin: 0;
+      }
+
       .container {
         min-width: auto;
         width: 95%;
