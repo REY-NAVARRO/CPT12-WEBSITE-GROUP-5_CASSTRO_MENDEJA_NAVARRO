@@ -161,7 +161,12 @@
         const row = document.createElement("tr");
 
         const timeCell = document.createElement("td");
-        timeCell.textContent = added_at;
+        const date = new Date(added_at);
+        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)}`;
+        const hours = date.getHours() % 12 || 12;
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        timeCell.textContent = `${formattedDate} ${hours}:${minutes} ${ampm}`;
 
         const nameCell = document.createElement("td");
         nameCell.textContent = name;
