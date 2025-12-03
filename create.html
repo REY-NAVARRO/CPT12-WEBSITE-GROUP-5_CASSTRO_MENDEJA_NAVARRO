@@ -58,7 +58,6 @@
 
   <div id="registration-modal">
     <form id="registration-form">
-      <!-- ...existing fields... -->
       <label for="role">Role:</label>
       <select id="role" name="role">
         <option value="student">Student</option>
@@ -66,9 +65,18 @@
         <option value="admin">Admin</option>
       </select>
 
-      <div id="subject-field" style="display: none;">
-        <label for="subject">Subject:</label>
-        <input type="text" id="subject" name="subject" placeholder="Enter subject">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <div id="teacher-subject-field" style="display: none;">
+        <label for="teacher-subject">Subject:</label>
+        <input type="text" id="teacher-subject" name="teacher-subject" placeholder="Enter subject">
       </div>
 
       <button type="submit">Register</button>
@@ -201,12 +209,49 @@
       }
       updateLoginStatus();
 
-      document.getElementById('role').addEventListener('change', function () {
-        const subjectField = document.getElementById('subject-field');
-        if (this.value === 'teacher') {
-          subjectField.style.display = 'block';
+      const roleField = document.getElementById("role");
+      const teacherSubjectField = document.getElementById("teacher-subject-field");
+      const registrationForm = document.getElementById("registration-form");
+
+      roleField.addEventListener("change", () => {
+        if (roleField.value === "teacher") {
+          teacherSubjectField.style.display = "block";
         } else {
-          subjectField.style.display = 'none';
+          teacherSubjectField.style.display = "none";
+        }
+      });
+
+      registrationForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const role = roleField.value;
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const subject = role === "teacher" ? document.getElementById("teacher-subject").value.trim() : null;
+
+        if (!role || !name || !email || !password || (role === "teacher" && !subject)) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        try {
+          const response = await fetch("api/register.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role, name, email, password, subject })
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert("Registration successful!");
+            registrationForm.reset();
+          } else {
+            alert(result.error || "Registration failed.");
+          }
+        } catch (error) {
+          console.error("Error during registration:", error);
+          alert("An error occurred. Please try again.");
         }
       });
     });
