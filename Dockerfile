@@ -25,5 +25,8 @@ EXPOSE 8080
 # Set environment variables from Render automatically
 # (Render injects env variables, e.g., DB_HOST, DB_USER, DATABASE_URL, etc.)
 
+# Configure Apache to listen on port 8080
+RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
 # Apache runs in foreground
 CMD ["apache2-foreground"]
